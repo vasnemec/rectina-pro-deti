@@ -932,6 +932,7 @@
       muted: false,
       pexesoOpen: [],
       pexesoMatched: new Set(),
+      pexesoSpeak: new Map(),
       currentLesson: "1"
     };
 
@@ -2581,20 +2582,67 @@
       grid.innerHTML = "";
       state.pexesoOpen = [];
       state.pexesoMatched = new Set();
+      state.pexesoSpeak = buildPexesoMap(cards, state.currentLessonData);
       setSectionVisibility("pexeso", cards.length > 0);
 
       const shuffled = [...cards].sort(() => Math.random() - 0.5);
       shuffled.forEach((card, idx) => {
+        const speakLabel = card.lang === "GR"
+          ? card.label
+          : getPexesoSpeakText(card);
         const btn = document.createElement("button");
         btn.className = "memory-card";
         btn.dataset.id = card.id;
         btn.dataset.index = idx;
         btn.dataset.state = "hidden";
+        btn.dataset.speak = speakLabel;
         btn.innerHTML = `<span style="opacity:0;">?</span>`;
         btn.addEventListener("click", () => handlePexesoClick(btn, card));
         grid.appendChild(btn);
       });
       updatePexesoStatus();
+    }
+
+    function getPexesoSpeakText(card) {
+      if (card.lang === "GR") return card.label;
+      const speak = state.pexesoSpeak.get(card.id);
+      if (speak) return speak;
+      const lesson = state.currentLessonData;
+      if (!lesson) return card.label;
+      const labelMatch = (lesson.words || []).find((w) =>
+        (w.cz || "").trim().toLowerCase() === (card.label || "").trim().toLowerCase()
+      );
+      if (labelMatch?.gr) return labelMatch.gr;
+      const explicit = (lesson.pexeso || []).find((c) => c.id === card.id && c.lang === "GR");
+      if (explicit?.label) return explicit.label;
+      const wordMatch = (lesson.words || []).find((w, idx) => {
+        const slug = toSlug(w.cz || w.gr || "", idx);
+        return slug === card.id || toSlug(w.gr || "", idx) === card.id;
+      });
+      return wordMatch?.gr || card.label;
+    }
+
+    function buildPexesoMap(cards = [], lesson) {
+      const dict = new Map();
+      const addEntry = (id, field, value) => {
+        if (!value) return;
+        const entry = dict.get(id) || {};
+        entry[field] = value;
+        dict.set(id, entry);
+      };
+
+      cards.forEach((c) => addEntry(c.id, c.lang === "GR" ? "gr" : "cz", c.label));
+      (lesson?.words || []).forEach((w, idx) => {
+        const id = toSlug(w.cz || w.gr || "", idx);
+        addEntry(id, "cz", w.cz);
+        addEntry(id, "gr", w.gr);
+      });
+
+      const speak = new Map();
+      dict.forEach((entry, id) => {
+        if (entry.gr) speak.set(id, entry.gr);
+      });
+      return speak;
     }
 
     function handlePexesoClick(btn, card) {
@@ -2605,10 +2653,8 @@
       btn.dataset.state = "open";
       btn.textContent = card.label;
       playTone(620, 0.16);
-      const greekMatch = card.lang === "GR"
-        ? card.label
-        : ((state.currentLessonData?.pexeso || []).find((c) => c.id === card.id && c.lang === "GR")?.label || card.label);
-      speakGreek(greekMatch);
+      const speakText = btn.dataset.speak || state.pexesoSpeak.get(card.id) || getPexesoSpeakText(card);
+      speakGreek(speakText);
       state.pexesoOpen.push({ btn, card });
 
       if (state.pexesoOpen.length === 2) {
