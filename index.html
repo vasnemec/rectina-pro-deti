@@ -39,16 +39,16 @@
     }
 
     header.topbar {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto 1fr;
       align-items: center;
       gap: 16px;
-      justify-content: space-between;
       padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(99, 91, 255, 0.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      background: linear-gradient(120deg, rgba(123, 180, 255, 0.35), rgba(255, 212, 71, 0.35));
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      border-radius: calc(var(--radius) * 1.1);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 12px;
       z-index: 10;
@@ -75,9 +75,19 @@
       box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.6), 0 6px 16px rgba(0, 0, 0, 0.08);
     }
 
-    nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    nav { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: flex-end; margin-left: auto; }
 
-    nav a {
+    .nav-pills {
+      display: inline-flex;
+      gap: 6px;
+      padding: 6px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 14px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(99, 91, 255, 0.12);
+    }
+
+    .nav-pills a {
       text-decoration: none;
       color: var(--ink);
       font-weight: 700;
@@ -86,7 +96,8 @@
       transition: background 180ms ease, transform 180ms ease;
     }
 
-    nav a:hover, nav a:focus-visible {
+    .nav-pills a:hover,
+    .nav-pills a:focus-visible {
       background: rgba(123, 180, 255, 0.18);
       outline: none;
       transform: translateY(-1px);
@@ -97,6 +108,15 @@
       padding: 8px 0;
       display: inline-flex;
       align-items: center;
+    }
+
+    .lesson-select {
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(99, 91, 255, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      font-weight: 700;
+      box-shadow: var(--shadow);
     }
 
     .top-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -345,6 +365,9 @@
     .memory-card[data-state="open"] { background: #fffef5; border-color: rgba(255, 212, 71, 0.8); }
     .memory-card[data-state="matched"] { background: rgba(111, 224, 194, 0.25); color: #0f4b3e; }
 
+    .lesson-block { display: none; }
+    .lesson-block[data-active="true"] { display: block; }
+
     footer { margin-top: 30px; text-align: center; color: #4a4761; font-weight: 600; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -360,13 +383,16 @@
         Lekce 1 — Barvy, pozdravy, pexeso
       </div>
       <nav aria-label="Hlavní navigace">
-        <span class="nav-label">Lekce 1</span>
-        <button class="pill" id="pickLesson">Vybrat lekci</button>
+        <span class="nav-label">Lekce</span>
+        <select class="lesson-select" id="lessonSelect" aria-label="Výběr lekce">
+          <option value="1" selected>Lekce 1</option>
+          <option value="2">Lekce 2</option>
+        </select>
       </nav>
-      <div class="top-actions"></div>
     </header>
 
     <main id="zacatek">
+      <div class="lesson-block" data-lesson="1" data-active="true">
       <section class="section" id="slova">
         <div class="section-header">
           <div class="section-title">
@@ -409,22 +435,6 @@
         <div class="phrase-list" id="phraseList"></div>
       </section>
 
-      <section class="section" id="video">
-        <div class="section-header">
-          <div class="section-title">
-            <span class="tag" style="background: rgba(123, 180, 255, 0.22);">Ukázkové video</span>
-            Krátký klip k lekci
-          </div>
-        </div>
-        <div class="video-card">
-          <div class="video-box" id="videoBox" role="button" aria-label="Přehrát ukázkové video"></div>
-          <div>
-            <strong>„Slunce a modré moře“</strong>
-            <p>Mini klip, kde děti pozdraví „Ahoj / Kaliméra“, ukážou na slunce a moře a řeknou krátkou větu.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="section" id="pexeso">
         <div class="section-header">
           <div class="section-title">
@@ -438,11 +448,22 @@
         </div>
         <div class="memory-grid" id="memoryGrid" aria-live="polite"></div>
       </section>
+      </div>
+
+      <div class="lesson-block" data-lesson="2">
+        <section class="section">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="tag" style="background: rgba(123, 180, 255, 0.22);">Lekce 2</span>
+              Připravujeme nová slovíčka a čísla
+            </div>
+          </div>
+          <p>Další lekce přidá čísla 1–10, barvy moře a nové pexeso s obrázky. Vyberte lekci 1 pro aktuální obsah.</p>
+        </section>
+      </div>
     </main>
 
-    <footer>
-      Lekce 1 je připravená. Přidáme audio, ilustrace a další hry.
-    </footer>
+    <footer></footer>
   </div>
 
   <script>
@@ -454,6 +475,7 @@
 
     let audioCtx;
     const toneQueue = [];
+    let speakTimeout;
 
     function ensureAudio() {
       if (!audioCtx) {
@@ -479,6 +501,17 @@
       osc.start(startAt);
       osc.stop(endAt);
       setTimeout(() => toneQueue.shift(), duration * 1000 + 80);
+    }
+
+    function speakGreek(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      clearTimeout(speakTimeout);
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "el-GR";
+      utter.rate = 0.95;
+      utter.pitch = 1;
+      speakTimeout = setTimeout(() => window.speechSynthesis.speak(utter), 80);
     }
 
     const words = [
@@ -542,7 +575,10 @@
           <small>${w.gr}</small>
           <span class="mini"></span>
         `;
-        btn.addEventListener("click", () => playTone(620, 0.18));
+        btn.addEventListener("click", () => {
+          playTone(620, 0.18);
+          speakGreek(w.gr);
+        });
         grid.appendChild(btn);
       });
     }
@@ -577,6 +613,7 @@
           const flipped = inner.dataset.flipped === "true";
           inner.dataset.flipped = (!flipped).toString();
           playTone(flipped ? 540 : 720, 0.16);
+          if (!flipped) speakGreek(card.back);
         });
         wrap.appendChild(inner);
         grid.appendChild(wrap);
@@ -598,7 +635,10 @@
           </div>
           <button class="pill" data-tone="${g.tone}">Zkusit</button>
         `;
-        row.querySelector("button").addEventListener("click", () => playTone(g.tone, 0.18));
+        row.querySelector("button").addEventListener("click", () => {
+          playTone(g.tone, 0.18);
+          speakGreek(g.descGr || g.label);
+        });
         list.appendChild(row);
       });
     }
@@ -617,7 +657,10 @@
           </div>
           <button class="pill" data-tone="${p.tone}">Přehrát</button>
         `;
-        row.querySelector("button").addEventListener("click", () => playTone(p.tone, 0.2));
+        row.querySelector("button").addEventListener("click", () => {
+          playTone(p.tone, 0.2);
+          speakGreek(p.gr);
+        });
         list.appendChild(row);
       });
     }
@@ -650,6 +693,10 @@
       btn.dataset.state = "open";
       btn.textContent = card.label;
       playTone(620, 0.16);
+      const greekMatch = card.lang === "GR"
+        ? card.label
+        : (pexesoCards.find((c) => c.id === card.id && c.lang === "GR")?.label || card.label);
+      speakGreek(greekMatch);
       state.pexesoOpen.push({ btn, card });
 
       if (state.pexesoOpen.length === 2) {
@@ -682,21 +729,12 @@
 
     function bindControls() {
       const shuffleFlash = document.getElementById("shuffleFlash");
-      const videoBox = document.getElementById("videoBox");
       const resetPexeso = document.getElementById("resetPexeso");
-      const pickLesson = document.getElementById("pickLesson");
+      const lessonSelect = document.getElementById("lessonSelect");
 
       shuffleFlash.addEventListener("click", () => {
         renderFlashcards([...flashcards].sort(() => Math.random() - 0.5));
         playTone(780, 0.16);
-      });
-
-      videoBox.addEventListener("click", () => {
-        videoBox.textContent = "Hraje ukázka...";
-        playTone(520, 0.3);
-        setTimeout(() => {
-          videoBox.textContent = "";
-        }, 1200);
       });
 
       resetPexeso.addEventListener("click", () => {
@@ -704,8 +742,14 @@
         playTone(600, 0.2);
       });
 
-      if (pickLesson) {
-        pickLesson.addEventListener("click", () => playTone(540, 0.18));
+      if (lessonSelect) {
+        lessonSelect.addEventListener("change", () => {
+          const chosen = lessonSelect.value;
+          document.querySelectorAll(".lesson-block").forEach((block) => {
+            block.dataset.active = (block.dataset.lesson === chosen).toString();
+          });
+          playTone(540, 0.18);
+        });
       }
     }
 
