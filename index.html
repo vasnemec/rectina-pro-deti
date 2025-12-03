@@ -493,6 +493,268 @@
       font-size: 1.4rem;
     }
 
+    .listen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .listen-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+
+    .listen-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .listen-btn {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(99, 91, 255, 0.16);
+      background: rgba(99, 91, 255, 0.05);
+      box-shadow: var(--shadow);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .listen-btn[data-correct="true"].good {
+      border-color: rgba(111, 224, 194, 0.6);
+      background: rgba(111, 224, 194, 0.18);
+    }
+
+    .sentence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .sentence-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(255, 125, 140, 0.16);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+
+    .sentence-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .sentence-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 125, 140, 0.3);
+      background: rgba(255, 125, 140, 0.08);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .sentence-btn.good {
+      background: rgba(111, 224, 194, 0.22);
+      border-color: rgba(111, 224, 194, 0.6);
+    }
+
+    .pair-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .pair-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 8px;
+    }
+
+    .pair-columns {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .pair-item {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(99, 91, 255, 0.14);
+      background: rgba(99, 91, 255, 0.05);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .pair-item.good {
+      background: rgba(111, 224, 194, 0.22);
+      border-color: rgba(111, 224, 194, 0.6);
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .task-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(123, 180, 255, 0.16);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 8px;
+    }
+
+    .task-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(123, 180, 255, 0.3);
+      background: rgba(123, 180, 255, 0.12);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .task-btn.done {
+      background: rgba(111, 224, 194, 0.22);
+      border-color: rgba(111, 224, 194, 0.6);
+    }
+
+    .sequence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .sequence-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+
+    .sequence-steps {
+      display: grid;
+      gap: 6px;
+    }
+
+    .sequence-step {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(99, 91, 255, 0.14);
+      background: rgba(99, 91, 255, 0.05);
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .seq-buttons {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .seq-btn {
+      border: 1px solid rgba(99, 91, 255, 0.2);
+      background: rgba(99, 91, 255, 0.12);
+      border-radius: 10px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .fill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .fill-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(255, 212, 71, 0.2);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+
+    .fill-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .fill-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 212, 71, 0.3);
+      background: rgba(255, 212, 71, 0.12);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .fill-btn.good {
+      background: rgba(111, 224, 194, 0.22);
+      border-color: rgba(111, 224, 194, 0.6);
+    }
+
+    .sound-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .sound-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+
+    .sound-options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .sound-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(99, 91, 255, 0.2);
+      background: rgba(99, 91, 255, 0.08);
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sound-btn.good {
+      background: rgba(111, 224, 194, 0.22);
+      border-color: rgba(111, 224, 194, 0.6);
+    }
+
+
     footer { margin-top: 30px; text-align: center; color: #4a4761; font-weight: 600; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -510,12 +772,12 @@
       <nav aria-label="Hlavní navigace">
         <span class="nav-label">Lekce</span>
         <select class="lesson-select" id="lessonSelect" aria-label="Výběr lekce">
-          <option value="1" selected>Lekce 1</option>
-          <option value="2">Lekce 2</option>
-          <option value="3">Lekce 3</option>
-          <option value="4">Lekce 4</option>
-          <option value="5">Lekce 5</option>
-          <option value="6">Lekce 6</option>
+          <option value="1" selected>Lekce 1 — Barvy, pozdravy</option>
+          <option value="2">Lekce 2 — Čísla a dům</option>
+          <option value="3">Lekce 3 — Jídlo a pití</option>
+          <option value="4">Lekce 4 — Rodina</option>
+          <option value="5">Lekce 5 — Škola a hřiště</option>
+          <option value="6">Lekce 6 — V parku</option>
         </select>
       </nav>
     </header>
@@ -562,6 +824,77 @@
         </div>
         <div class="phrase-list" id="phraseList"></div>
       </section>
+
+      <section class="section" id="poslech">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(123, 180, 255, 0.22);">Poslechni a označ</span>
+            Vyber správný obrázek
+          </div>
+        </div>
+        <div class="listen-grid" id="listenGrid"></div>
+      </section>
+
+      <section class="section" id="vyber">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(255, 125, 140, 0.16); color:#742436;">Vyber větu</span>
+            Najdi správnou řeckou větu
+          </div>
+        </div>
+        <div class="sentence-grid" id="sentenceGrid"></div>
+      </section>
+
+      <section class="section" id="spojuj">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(99, 91, 255, 0.15);">Spoj dvojici</span>
+            Spoj české a řecké slovo
+          </div>
+        </div>
+        <div class="pair-grid" id="pairGrid"></div>
+      </section>
+
+      <section class="section" id="ukoly">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(111, 224, 194, 0.25); color:#0f4b3e;">Úkol: udělej</span>
+            Jednoduché pokyny
+          </div>
+        </div>
+        <div class="task-grid" id="taskGrid"></div>
+      </section>
+
+      <section class="section" id="hledej">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(255, 125, 140, 0.16); color:#742436;">Hledejte zvuk</span>
+            Poslechni a vyber, co slyšíš
+          </div>
+        </div>
+        <div class="sound-grid" id="soundGrid"></div>
+      </section>
+
+      <section class="section" id="serad">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(99, 91, 255, 0.12);">Seřaď kroky</span>
+            Dej je do správného pořadí
+          </div>
+        </div>
+        <div class="sequence-grid" id="sequenceGrid"></div>
+      </section>
+
+      <section class="section" id="doplneni">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(255, 212, 71, 0.25);">Doplň slovo</span>
+            Vyber správné slovo
+          </div>
+        </div>
+        <div class="fill-grid" id="fillGrid"></div>
+      </section>
+
 
       <section class="section" id="pexeso">
         <div class="section-header">
@@ -643,7 +976,7 @@
 
     const lessons = {
       "1": {
-        title: "Lekce 1 — Barvy, pozdravy, pexeso",
+        title: "Lekce 1 — Barvy, pozdravy",
         words: [
           { cz: "Slunce", gr: "Ήλιος", color: "var(--sun)", icon: "☀️" },
           { cz: "Moře", gr: "Θάλασσα", color: "var(--sky)", icon: "🌊" },
@@ -671,6 +1004,16 @@
           { cz: "Podívej, modrá vlna!", gr: "Κοίτα, μπλε κύμα!", tone: 710 },
           { cz: "Děkuji za hru.", gr: "Ευχαριστώ για το παιχνίδι.", tone: 520 },
           { cz: "Chci hrát pexeso.", gr: "Θέλω να παίξω μνήμη.", tone: 640 }
+        ],
+        listen: [
+          {
+            prompt: "Γεια!",
+            options: [
+              { label: "Pozdrav", icon: "👋", correct: true },
+              { label: "Moře", icon: "🌊" },
+              { label: "Slunce", icon: "☀️" }
+            ]
+          }
         ],
         pexeso: [
           { id: "sun", label: "Slunce", lang: "CZ" },
@@ -714,6 +1057,21 @@
           { cz: "Dvě okna.", gr: "Δύο παράθυρα.", tone: 520 },
           { cz: "Dům je tady.", gr: "Το σπίτι είναι εδώ.", tone: 560 }
         ],
+        listen: [
+          {
+            prompt: "Δύο",
+            options: [
+              { label: "Dva", icon: "2️⃣", correct: true },
+              { label: "Tři", icon: "3️⃣" },
+              { label: "Jedna", icon: "1️⃣" }
+            ]
+          }
+        ],
+        pairs: [
+          { left: "Jedna", right: "Ένα" },
+          { left: "Dva", right: "Δύο" },
+          { left: "Dům", right: "Σπίτι" }
+        ],
         pexeso: [
           { id: "one", label: "Jedna", lang: "CZ" },
           { id: "one", label: "Ένα", lang: "GR" },
@@ -755,6 +1113,38 @@
           { cz: "Mám hlad.", gr: "Πεινάω.", tone: 520 },
           { cz: "Mám žízeň.", gr: "Διψάω.", tone: 540 },
           { cz: "Chci jablko.", gr: "Θέλω ένα μήλο.", tone: 560 }
+        ],
+        sentences: [
+          {
+            prompt: "Mám žízeň.",
+            options: [
+              { gr: "Διψάω.", correct: true },
+              { gr: "Πεινάω." },
+              { gr: "Θέλω μήλο." }
+            ]
+          },
+          {
+            prompt: "Chci jablko.",
+            options: [
+              { gr: "Θέλω ένα μήλο.", correct: true },
+              { gr: "Το νερό είναι κρύο." },
+              { gr: "Το ψωμί είναι φρέσκο." }
+            ]
+          }
+        ],
+        tasks: [
+          { text: "Napij se vody.", gr: "Πιες νερό.", tone: 540 },
+          { text: "Vezmi jablko.", gr: "Πάρε το μήλο.", tone: 560 }
+        ],
+        soundHunt: [
+          {
+            prompt: "Πιες νερό",
+            options: [
+              { label: "Voda", icon: "💧", correct: true },
+              { label: "Chléb", icon: "🍞" },
+              { label: "Jablko", icon: "🍎" }
+            ]
+          }
         ],
         pexeso: [
           { id: "bread", label: "Chléb", lang: "CZ" },
@@ -798,6 +1188,21 @@
           { cz: "Máma je tady.", gr: "Η μαμά είναι εδώ.", tone: 540 },
           { cz: "Táta se usmívá.", gr: "Ο μπαμπάς χαμογελά.", tone: 520 }
         ],
+        listen: [
+          {
+            prompt: "Μαμά",
+            options: [
+              { label: "Máma", icon: "👩", correct: true },
+              { label: "Táta", icon: "👨" },
+              { label: "Babi", icon: "👵" }
+            ]
+          }
+        ],
+        sequence: [
+          { label: "Ráno", detail: "Καλημέρα", up: true },
+          { label: "Poledne", detail: "Μεσημέρι" },
+          { label: "Večer", detail: "Καλησπέρα" }
+        ],
         pexeso: [
           { id: "mom", label: "Máma", lang: "CZ" },
           { id: "mom", label: "Μαμά", lang: "GR" },
@@ -839,6 +1244,34 @@
           { cz: "Jdu do školy.", gr: "Πάω στο σχολείο.", tone: 520 },
           { cz: "Mám knihu.", gr: "Έχω ένα βιβλίο.", tone: 540 },
           { cz: "Hraju si s míčem.", gr: "Παίζω με την μπάλα.", tone: 560 }
+        ],
+        sentences: [
+          {
+            prompt: "Hraju si s míčem.",
+            options: [
+              { gr: "Παίζω με την μπάλα.", correct: true },
+              { gr: "Πάω στο σχολείο." },
+              { gr: "Έχω ένα βιβλίο." }
+            ]
+          }
+        ],
+        fill: [
+          {
+            prompt: "Jdu do ____.",
+            options: [
+              { gr: "σχολείο", correct: true },
+              { gr: "μήλο" },
+              { gr: "νερό" }
+            ]
+          },
+          {
+            prompt: "Mám ____.",
+            options: [
+              { gr: "βιβλίο", correct: true },
+              { gr: "σχολείο" },
+              { gr: "σπίτι" }
+            ]
+          }
         ],
         pexeso: [
           { id: "school", label: "Škola", lang: "CZ" },
@@ -1007,6 +1440,217 @@
       });
     }
 
+    function renderListen(list = []) {
+      const grid = document.getElementById("listenGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("poslech", list.length > 0);
+      list.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "listen-card";
+        card.innerHTML = `
+          <div class="tag">Poslechni: ${item.prompt}</div>
+          <div class="listen-options">
+            ${item.options.map((opt, idx) => `
+              <button class="listen-btn" data-correct="${opt.correct || false}" data-opt="${idx}">
+                <span>${opt.icon || "★"} ${opt.label || ""}</span>
+                <span>→</span>
+              </button>
+            `).join("")}
+          </div>
+        `;
+        card.querySelectorAll(".listen-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const correct = btn.dataset.correct === "true";
+            if (correct) btn.classList.add("good");
+            playTone(correct ? 680 : 420, 0.16);
+            if (item.prompt) speakGreek(item.prompt);
+          });
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderSentences(list = []) {
+      const grid = document.getElementById("sentenceGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("vyber", list.length > 0);
+      list.forEach((row) => {
+        const card = document.createElement("div");
+        card.className = "sentence-card";
+        card.innerHTML = `
+          <strong>${row.prompt}</strong>
+          <div class="sentence-options">
+            ${row.options.map((opt, idx) => `
+              <button class="sentence-btn" data-correct="${opt.correct || false}" data-opt="${idx}">
+                ${opt.gr}
+              </button>
+            `).join("")}
+          </div>
+        `;
+        card.querySelectorAll(".sentence-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const correct = btn.dataset.correct === "true";
+            if (correct) btn.classList.add("good");
+            playTone(correct ? 720 : 420, 0.16);
+            if (correct) speakGreek(btn.textContent.trim());
+          });
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderPairs(list = []) {
+      const grid = document.getElementById("pairGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("spojuj", list.length > 0);
+      list.forEach((pair, idx) => {
+        const card = document.createElement("div");
+        card.className = "pair-card";
+        card.innerHTML = `
+          <div class="tag">Dvojice ${idx + 1}</div>
+          <div class="pair-columns">
+            <button class="pair-item" data-side="left">${pair.left}</button>
+            <button class="pair-item" data-side="right">${pair.right}</button>
+          </div>
+        `;
+        card.querySelectorAll(".pair-item").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            btn.classList.add("good");
+            speakGreek(pair.right);
+            playTone(740, 0.14);
+          });
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderTasks(list = []) {
+      const grid = document.getElementById("taskGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("ukoly", list.length > 0);
+      list.forEach((task, idx) => {
+        const card = document.createElement("div");
+        card.className = "task-card";
+        card.innerHTML = `
+          <div class="tag">Úkol ${idx + 1}</div>
+          <strong>${task.text}</strong>
+          <button class="task-btn">Hotovo</button>
+        `;
+        const btn = card.querySelector(".task-btn");
+        btn.addEventListener("click", () => {
+          btn.classList.add("done");
+          speakGreek(task.gr || task.text);
+          playTone(640, 0.16);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderSoundHunt(list = []) {
+      const grid = document.getElementById("soundGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("hledej", list.length > 0);
+      list.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "sound-card";
+        card.innerHTML = `
+          <div class="tag">Poslechni</div>
+          <button class="pill" data-play="true">▶️ ${item.prompt}</button>
+          <div class="sound-options">
+            ${item.options.map((opt, idx) => `
+              <button class="sound-btn" data-correct="${opt.correct || false}" data-opt="${idx}">
+                <span>${opt.icon || "★"} ${opt.label || ""}</span>
+                <span>→</span>
+              </button>
+            `).join("")}
+          </div>
+        `;
+        card.querySelector('[data-play="true"]').addEventListener("click", () => speakGreek(item.prompt));
+        card.querySelectorAll(".sound-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const correct = btn.dataset.correct === "true";
+            if (correct) btn.classList.add("good");
+            playTone(correct ? 760 : 420, 0.14);
+            speakGreek(item.prompt);
+          });
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderSequence(list = []) {
+      const grid = document.getElementById("sequenceGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("serad", list.length > 0);
+      const steps = [...list];
+
+      function refresh() {
+        grid.innerHTML = "";
+        steps.forEach((step, idx) => {
+          const card = document.createElement("div");
+          card.className = "sequence-card";
+          card.innerHTML = `
+            <div class="tag">Krok ${idx + 1}</div>
+            <div class="sequence-steps">
+              ${steps.map((s, i) => `
+                <div class="sequence-step">
+                  <span>${i + 1}. ${s.label}</span>
+                  <div class="seq-buttons">
+                    <button class="seq-btn" data-dir="-1" data-idx="${i}">↑</button>
+                    <button class="seq-btn" data-dir="1" data-idx="${i}">↓</button>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          `;
+          card.querySelectorAll(".seq-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const dir = Number(btn.dataset.dir);
+              const pos = Number(btn.dataset.idx);
+              const target = pos + dir;
+              if (target < 0 || target >= steps.length) return;
+              [steps[pos], steps[target]] = [steps[target], steps[pos]];
+              playTone(520, 0.1);
+              refresh();
+            });
+          });
+          grid.appendChild(card);
+        });
+      }
+
+      if (steps.length) refresh();
+    }
+
+    function renderFill(list = []) {
+      const grid = document.getElementById("fillGrid");
+      grid.innerHTML = "";
+      setSectionVisibility("doplneni", list.length > 0);
+      list.forEach((item, idx) => {
+        const card = document.createElement("div");
+        card.className = "fill-card";
+        card.innerHTML = `
+          <div class="tag">Věta ${idx + 1}</div>
+          <strong>${item.prompt}</strong>
+          <div class="fill-options">
+            ${item.options.map((opt, i) => `
+              <button class="fill-btn" data-correct="${opt.correct || false}" data-opt="${i}">
+                ${opt.gr}
+              </button>
+            `).join("")}
+          </div>
+        `;
+        card.querySelectorAll(".fill-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const correct = btn.dataset.correct === "true";
+            if (correct) btn.classList.add("good");
+            playTone(correct ? 700 : 420, 0.14);
+            if (correct) speakGreek(btn.textContent.trim());
+          });
+        });
+        grid.appendChild(card);
+      });
+    }
+
     function renderPexeso(cards = []) {
       const grid = document.getElementById("memoryGrid");
       grid.innerHTML = "";
@@ -1155,6 +1799,13 @@
       renderFlashcards(lesson.flashcards || []);
       renderGestures(lesson.gestures || []);
       renderPhrases(lesson.phrases || []);
+      renderListen(lesson.listen || []);
+      renderSentences(lesson.sentences || []);
+      renderPairs(lesson.pairs || []);
+      renderTasks(lesson.tasks || []);
+      renderSequence(lesson.sequence || []);
+      renderFill(lesson.fill || []);
+      renderSoundHunt(lesson.soundHunt || []);
       renderPexeso(lesson.pexeso || []);
       renderStory(lesson.story || [], lesson.storyActors || {});
       updatePexesoStatus();
