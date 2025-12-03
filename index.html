@@ -40,7 +40,7 @@
 
     header.topbar {
       display: grid;
-      grid-template-columns: auto 1fr;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: 16px;
       padding: 14px 16px;
@@ -120,6 +120,41 @@
     }
 
     .top-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .home-card {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .home-card:hover,
+    .home-card:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+    }
+
+    .home-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-weight: 700;
+      color: #4d4a5f;
+    }
+
+    .home-meta .tag { background: rgba(123, 180, 255, 0.14); }
 
     button {
       border: none;
@@ -775,16 +810,27 @@
   <div class="page">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-badge" id="brandBadge">R1</div>
-        <span id="brandTitle">Lekce 1 — Barvy a pozdravy</span>
+        <div class="brand-badge" id="brandBadge">R</div>
+        <span id="brandTitle">Vyberte lekci</span>
       </div>
       <nav aria-label="Hlavní navigace">
         <span class="nav-label">Lekce</span>
         <select class="lesson-select" id="lessonSelect" aria-label="Výběr lekce"></select>
       </nav>
+      <button class="pill" id="backHome">Zpět na seznam</button>
     </header>
 
-    <main id="zacatek">
+    <section class="section" id="homeView">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="tag">Seznam lekcí</span>
+          Vyberte, kterou chcete otevřít
+        </div>
+      </div>
+      <div class="home-grid" id="homeLessonGrid"></div>
+    </section>
+
+    <main id="lessonView" style="display:none;" aria-live="polite">
       <section class="section" id="slova">
         <div class="section-header">
           <div class="section-title">
@@ -933,7 +979,8 @@
       pexesoOpen: [],
       pexesoMatched: new Set(),
       pexesoSpeak: new Map(),
-      currentLesson: "1"
+      currentLesson: "1",
+      view: "home"
     };
 
     let audioCtx;
@@ -2803,10 +2850,73 @@
       playTone(540, 0.12);
     }
 
+    function showView(view = "home") {
+      const home = document.getElementById("homeView");
+      const lesson = document.getElementById("lessonView");
+      const nav = document.querySelector("nav[aria-label='Hlavní navigace']");
+      const select = document.getElementById("lessonSelect");
+      const backBtn = document.getElementById("backHome");
+      state.view = view;
+      if (home) home.style.display = view === "home" ? "" : "none";
+      if (lesson) lesson.style.display = view === "lesson" ? "" : "none";
+      if (nav) nav.style.display = view === "home" ? "none" : "";
+      if (select) select.style.display = view === "home" ? "none" : "";
+      if (backBtn) backBtn.style.display = view === "home" ? "none" : "";
+      if (view === "home") {
+        const brandTitle = document.getElementById("brandTitle");
+        const brandBadge = document.getElementById("brandBadge");
+        if (brandTitle) brandTitle.textContent = "Vyberte lekci";
+        if (brandBadge) brandBadge.textContent = "R";
+      }
+    }
+
+    function openLesson(lessonId = "1", { scroll = true } = {}) {
+      const wasHome = state.view !== "lesson";
+      setLesson(lessonId);
+      showView("lesson");
+      if (scroll && wasHome) {
+        const top = document.getElementById("lessonView");
+        if (top) top.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    function renderHome() {
+      const grid = document.getElementById("homeLessonGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+      lessonList.forEach((lesson) => {
+        const wordsCount = (lesson.words || []).length;
+        const acts = [
+          lesson.flashcards?.length && "Flashcards",
+          lesson.gestures?.length && "Příkazy",
+          lesson.phrases?.length && "Fráze",
+          lesson.listen?.length && "Poslech",
+          lesson.pexeso && "Pexeso"
+        ].filter(Boolean).slice(0, 3).join(" • ");
+
+        const card = document.createElement("button");
+        card.className = "home-card";
+        card.setAttribute("aria-label", `Otevřít lekci ${lesson.id}: ${lesson.title}`);
+        card.innerHTML = `
+          <div class="section-title" style="gap:6px;">
+            <span class="tag">Lekce ${lesson.id}</span>
+            ${lesson.title}
+          </div>
+          <div class="home-meta">
+            <span class="tag">${wordsCount} slov</span>
+            ${acts ? `<span class="tag">${acts}</span>` : ""}
+          </div>
+        `;
+        card.addEventListener("click", () => openLesson(lesson.id));
+        grid.appendChild(card);
+      });
+    }
+
     function bindControls() {
       const shuffleFlash = document.getElementById("shuffleFlash");
       const resetPexeso = document.getElementById("resetPexeso");
       const lessonSelect = document.getElementById("lessonSelect");
+      const backHome = document.getElementById("backHome");
 
       resetPexeso.addEventListener("click", () => {
         renderPexeso(getPexesoCards(state.currentLessonData));
@@ -2815,7 +2925,14 @@
 
       if (lessonSelect) {
         lessonSelect.addEventListener("change", () => {
-          setLesson(lessonSelect.value);
+          openLesson(lessonSelect.value, { scroll: false });
+        });
+      }
+
+      if (backHome) {
+        backHome.addEventListener("click", () => {
+          showView("home");
+          playTone(480, 0.1);
         });
       }
 
@@ -2828,7 +2945,8 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       populateLessonSelect();
-      setLesson("1");
+      renderHome();
+      showView("home");
       bindControls();
     });
   </script>
