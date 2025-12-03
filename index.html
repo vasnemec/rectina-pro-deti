@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rectina Pro Děti — Lekce 1</title>
+  <title>Rectina Pro Děti — Lekce</title>
   <style>
     :root {
       --bg: #f6f7fb;
@@ -650,6 +650,15 @@
       display: grid;
       gap: 10px;
     }
+    .sequence-card[data-correct="true"] {
+      border-color: rgba(111, 224, 194, 0.6);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.08);
+      background: linear-gradient(150deg, rgba(111, 224, 194, 0.18), #fff);
+    }
+    .sequence-card[data-correct="true"] .tag {
+      background: rgba(111, 224, 194, 0.25);
+      border-color: rgba(111, 224, 194, 0.5);
+    }
 
     .sequence-steps {
       display: grid;
@@ -767,18 +776,11 @@
     <header class="topbar">
       <div class="brand">
         <div class="brand-badge" id="brandBadge">R1</div>
-        <span id="brandTitle">Lekce 1 — Barvy, pozdravy, pexeso</span>
+        <span id="brandTitle">Lekce 1 — Barvy a pozdravy</span>
       </div>
       <nav aria-label="Hlavní navigace">
         <span class="nav-label">Lekce</span>
-        <select class="lesson-select" id="lessonSelect" aria-label="Výběr lekce">
-          <option value="1" selected>Lekce 1 — Barvy, pozdravy</option>
-          <option value="2">Lekce 2 — Čísla a dům</option>
-          <option value="3">Lekce 3 — Jídlo a pití</option>
-          <option value="4">Lekce 4 — Rodina</option>
-          <option value="5">Lekce 5 — Škola a hřiště</option>
-          <option value="6">Lekce 6 — V parku</option>
-        </select>
+        <select class="lesson-select" id="lessonSelect" aria-label="Výběr lekce"></select>
       </nav>
     </header>
 
@@ -787,7 +789,7 @@
         <div class="section-header">
           <div class="section-title">
             <span class="tag">Známe slova</span>
-            Začneme s barvami a pozdravy
+            Učíme se nové pojmy
           </div>
           <span class="tag lesson-label" style="background: rgba(255, 212, 71, 0.25);">Lekce 1</span>
         </div>
@@ -805,14 +807,14 @@
         <div class="flash-grid" id="flashGrid"></div>
       </section>
 
-      <section class="section" id="gesta">
+      <section class="section" id="imperativy">
         <div class="section-header">
           <div class="section-title">
             <span class="tag" style="background: rgba(111, 224, 194, 0.25); color:#0f4b3e;">Příkazy</span>
             Jednoduché povely
           </div>
         </div>
-        <div class="gesture-list" id="gestureList"></div>
+        <div class="gesture-list" id="commandList"></div>
       </section>
 
       <section class="section" id="fraze">
@@ -974,12 +976,17 @@
       speakTimeout = setTimeout(() => window.speechSynthesis.speak(utter), 80);
     }
 
-    const lessons = {
-      "1": {
-        title: "Lekce 1 — Barvy, pozdravy",
+    const lessonList = [
+      {
+        id: "1",
+        title: "Barvy a pozdravy",
         words: [
           { cz: "Slunce", gr: "Ήλιος", color: "var(--sun)", icon: "☀️" },
           { cz: "Moře", gr: "Θάλασσα", color: "var(--sky)", icon: "🌊" },
+          { cz: "Modrá", gr: "Μπλε", color: "var(--sky)", icon: "🟦" },
+          { cz: "Žlutá", gr: "Κίτρινο", color: "var(--sun)", icon: "🟨" },
+          { cz: "Zelená", gr: "Πράσινο", color: "var(--mint)", icon: "🟩" },
+          { cz: "Červená", gr: "Κόκκινο", color: "var(--coral)", icon: "🟥" },
           { cz: "Ahoj", gr: "Γεια σου", color: "var(--mint)", icon: "👋" },
           { cz: "Prosím", gr: "Παρακαλώ", color: "var(--coral)", icon: "😊" },
           { cz: "Děkuji", gr: "Ευχαριστώ", color: "var(--violet)", icon: "🙏" },
@@ -990,20 +997,17 @@
           { front: "Modrá", back: "Μπλε", example: "Moře je modré.", exampleGr: "Η θάλασσα είναι μπλε.", icon: "🌊" },
           { front: "Zelená", back: "Πράσινο", example: "List je zelený.", exampleGr: "Το φύλλο είναι πράσινο.", icon: "🌿" },
           { front: "Ahoj!", back: "Γεια!", example: "Řekni: \"Ahoj, kamaráde!\"", exampleGr: "Πες: \"Γεια, φίλε!\"", icon: "👋" },
-          { front: "Děkuji", back: "Ευχαριστώ", example: "Řekni: \"Děkuji!\"", exampleGr: "Πες: \"Ευχαριστώ!\"", icon: "🙏" },
-          { front: "Prosím", back: "Παρακαλώ", example: "Řekni: \"Prosím, můžeš?\"", exampleGr: "Πες: \"Παρακαλώ, μπορείς;\"", icon: "😊" }
+          { front: "Děkuji", back: "Ευχαριστώ", example: "Řekni: \"Děkuji!\"", exampleGr: "Πες: \"Ευχαριστώ!\"", icon: "🙏" }
         ],
         gestures: [
           { label: "Vstaň!", desc: "Postav se hned.", descGr: "Σήκω τώρα.", tone: 660 },
           { label: "Sedni!", desc: "Posaď se dolů.", descGr: "Κάτσε κάτω.", tone: 520 },
-          { label: "Otoč se!", desc: "Udělaj malou otočku.", descGr: "Κάνε μια μικρή στροφή.", tone: 740 },
           { label: "Řekni ahoj!", desc: "Řekni nahlas \"Ahoj\".", descGr: "Πες δυνατά «Γεια».", tone: 600 }
         ],
         phrases: [
           { cz: "Ahoj, já jsem Luna.", gr: "Γεια, είμαι η Λούνα.", tone: 430 },
           { cz: "Podívej, modrá vlna!", gr: "Κοίτα, μπλε κύμα!", tone: 710 },
-          { cz: "Děkuji za hru.", gr: "Ευχαριστώ για το παιχνίδι.", tone: 520 },
-          { cz: "Chci hrát pexeso.", gr: "Θέλω να παίξω μνήμη.", tone: 640 }
+          { cz: "Děkuji za hru.", gr: "Ευχαριστώ για το παιχνίδι.", tone: 520 }
         ],
         listen: [
           {
@@ -1014,24 +1018,11 @@
               { label: "Slunce", icon: "☀️" }
             ]
           }
-        ],
-        pexeso: [
-          { id: "sun", label: "Slunce", lang: "CZ" },
-          { id: "sun", label: "Ήλιος", lang: "GR" },
-          { id: "sea", label: "Moře", lang: "CZ" },
-          { id: "sea", label: "Θάλασσα", lang: "GR" },
-          { id: "hi", label: "Ahoj", lang: "CZ" },
-          { id: "hi", label: "Γεια", lang: "GR" },
-          { id: "blue", label: "Modrá", lang: "CZ" },
-          { id: "blue", label: "Μπλε", lang: "GR" },
-          { id: "yellow", label: "Žlutá", lang: "CZ" },
-          { id: "yellow", label: "Κίτρινο", lang: "GR" },
-          { id: "thanks", label: "Děkuji", lang: "CZ" },
-          { id: "thanks", label: "Ευχαριστώ", lang: "GR" }
         ]
       },
-      "2": {
-        title: "Lekce 2 — Čísla a dům",
+      {
+        id: "2",
+        title: "Čísla a dům",
         words: [
           { cz: "Jedna", gr: "Ένα", color: "var(--sun)", icon: "1️⃣" },
           { cz: "Dva", gr: "Δύο", color: "var(--sky)", icon: "2️⃣" },
@@ -1071,24 +1062,11 @@
           { left: "Jedna", right: "Ένα" },
           { left: "Dva", right: "Δύο" },
           { left: "Dům", right: "Σπίτι" }
-        ],
-        pexeso: [
-          { id: "one", label: "Jedna", lang: "CZ" },
-          { id: "one", label: "Ένα", lang: "GR" },
-          { id: "two", label: "Dva", lang: "CZ" },
-          { id: "two", label: "Δύο", lang: "GR" },
-          { id: "three", label: "Tři", lang: "CZ" },
-          { id: "three", label: "Τρία", lang: "GR" },
-          { id: "house", label: "Dům", lang: "CZ" },
-          { id: "house", label: "Σπίτι", lang: "GR" },
-          { id: "table", label: "Stůl", lang: "CZ" },
-          { id: "table", label: "Τραπέζι", lang: "GR" },
-          { id: "bed", label: "Postel", lang: "CZ" },
-          { id: "bed", label: "Κρεβάτι", lang: "GR" }
         ]
       },
-      "3": {
-        title: "Lekce 3 — Jídlo a pití",
+      {
+        id: "3",
+        title: "Jídlo a pití",
         words: [
           { cz: "Chléb", gr: "Ψωμί", color: "var(--sun)", icon: "🍞" },
           { cz: "Voda", gr: "Νερό", color: "var(--sky)", icon: "💧" },
@@ -1106,8 +1084,8 @@
           { front: "Med", back: "Μέλι", example: "Med je sladký.", exampleGr: "Το μέλι είναι γλυκό.", icon: "🍯" }
         ],
         gestures: [
-          { label: "Napij se!", desc: "Udělaj gesto pití.", descGr: "Κάνε κίνηση ότι πίνεις.", tone: 600 },
-          { label: "Zahraj si jablko!", desc: "Přilož ruce jako kousnutí.", descGr: "Κάνε πως δαγκώνεις μήλο.", tone: 520 }
+          { label: "Napij se!", desc: "Napij se vody.", descGr: "Πιες νερό.", tone: 600 },
+          { label: "Kousni do jablka!", desc: "Kousni do jablka nanečisto.", descGr: "Δάγκωσε ένα μήλο (σαν παιχνίδι).", tone: 520 }
         ],
         phrases: [
           { cz: "Mám hlad.", gr: "Πεινάω.", tone: 520 },
@@ -1140,29 +1118,16 @@
           {
             prompt: "Πιες νερό",
             options: [
-              { label: "Voda", icon: "💧", correct: true },
-              { label: "Chléb", icon: "🍞" },
-              { label: "Jablko", icon: "🍎" }
+              { label: "Napij se vody.", icon: "💧", correct: true },
+              { label: "Sněz chleba.", icon: "🍞" },
+              { label: "Vezmi jablko.", icon: "🍎" }
             ]
           }
-        ],
-        pexeso: [
-          { id: "bread", label: "Chléb", lang: "CZ" },
-          { id: "bread", label: "Ψωμί", lang: "GR" },
-          { id: "water", label: "Voda", lang: "CZ" },
-          { id: "water", label: "Νερό", lang: "GR" },
-          { id: "apple", label: "Jablko", lang: "CZ" },
-          { id: "apple", label: "Μήλο", lang: "GR" },
-          { id: "milk", label: "Mléko", lang: "CZ" },
-          { id: "milk", label: "Γάλα", lang: "GR" },
-          { id: "cheese", label: "Sýr", lang: "CZ" },
-          { id: "cheese", label: "Τυρί", lang: "GR" },
-          { id: "honey", label: "Med", lang: "CZ" },
-          { id: "honey", label: "Μέλι", lang: "GR" }
         ]
       },
-      "4": {
-        title: "Lekce 4 — Rodina",
+      {
+        id: "4",
+        title: "Rodina",
         words: [
           { cz: "Máma", gr: "Μαμά", color: "var(--coral)", icon: "👩" },
           { cz: "Táta", gr: "Μπαμπάς", color: "var(--sky)", icon: "👨" },
@@ -1180,8 +1145,8 @@
           { front: "Děda", back: "Παππούς", example: "Děda čte noviny.", exampleGr: "Ο παππούς διαβάζει εφημερίδα.", icon: "👴" }
         ],
         gestures: [
-          { label: "Objem babi!", desc: "Natáhni ruce pro obejmutí.", descGr: "Άπλωσε τα χέρια για αγκαλιά.", tone: 640 },
-          { label: "Zavolej tátu!", desc: "Řekni „táto“.", descGr: "Πες «μπαμπά».", tone: 580 }
+          { label: "Obejmi babi!", desc: "Obejmi babi.", descGr: "Αγκάλιασε τη γιαγιά.", tone: 640 },
+          { label: "Zavolej tátu!", desc: "Zavolej: „Táto!“", descGr: "Φώναξε: «Μπαμπά!»", tone: 580 }
         ],
         phrases: [
           { cz: "Miluji svou rodinu.", gr: "Αγαπώ την οικογένειά μου.", tone: 600 },
@@ -1202,24 +1167,11 @@
           { label: "Ráno", detail: "Καλημέρα", up: true },
           { label: "Poledne", detail: "Μεσημέρι" },
           { label: "Večer", detail: "Καλησπέρα" }
-        ],
-        pexeso: [
-          { id: "mom", label: "Máma", lang: "CZ" },
-          { id: "mom", label: "Μαμά", lang: "GR" },
-          { id: "dad", label: "Táta", lang: "CZ" },
-          { id: "dad", label: "Μπαμπάς", lang: "GR" },
-          { id: "bro", label: "Bratr", lang: "CZ" },
-          { id: "bro", label: "Αδελφός", lang: "GR" },
-          { id: "sis", label: "Sestra", lang: "CZ" },
-          { id: "sis", label: "Αδελφή", lang: "GR" },
-          { id: "granma", label: "Babi", lang: "CZ" },
-          { id: "granma", label: "Γιαγιά", lang: "GR" },
-          { id: "granpa", label: "Děda", lang: "CZ" },
-          { id: "granpa", label: "Παππούς", lang: "GR" }
         ]
       },
-      "5": {
-        title: "Lekce 5 — Škola a hřiště",
+      {
+        id: "5",
+        title: "Škola a hřiště",
         words: [
           { cz: "Škola", gr: "Σχολείο", color: "var(--violet)", icon: "🏫" },
           { cz: "Kniha", gr: "Βιβλίο", color: "var(--sun)", icon: "📕" },
@@ -1237,8 +1189,8 @@
           { front: "Kreslit", back: "Ζωγραφίζω", example: "Kreslím dům.", exampleGr: "Ζωγραφίζω ένα σπίτι.", icon: "🎨" }
         ],
         gestures: [
-          { label: "Nakresli kruh!", desc: "Nakresli prstem do vzduchu.", descGr: "Ζωγράφισε έναν κύκλο στον αέρα.", tone: 650 },
-          { label: "Kopni míč!", desc: "Ukaž kopnutí nohou.", descGr: "Δείξε πως κλωτσάς μπάλα.", tone: 540 }
+          { label: "Nakresli kruh!", desc: "Nakresli kruh do vzduchu.", descGr: "Ζωγράφισε έναν κύκλο στον αέρα.", tone: 650 },
+          { label: "Kopni míč!", desc: "Kopni do míče (naznač).", descGr: "Κλώτσα την μπάλα (δείξε).", tone: 540 }
         ],
         phrases: [
           { cz: "Jdu do školy.", gr: "Πάω στο σχολείο.", tone: 520 },
@@ -1258,6 +1210,7 @@
         fill: [
           {
             prompt: "Jdu do ____.",
+            promptGr: "Πάω στο ____.",
             options: [
               { gr: "σχολείο", correct: true },
               { gr: "μήλο" },
@@ -1266,65 +1219,983 @@
           },
           {
             prompt: "Mám ____.",
+            promptGr: "Έχω ____.",
             options: [
               { gr: "βιβλίο", correct: true },
               { gr: "σχολείο" },
               { gr: "σπίτι" }
             ]
           }
-        ],
-        pexeso: [
-          { id: "school", label: "Škola", lang: "CZ" },
-          { id: "school", label: "Σχολείο", lang: "GR" },
-          { id: "book", label: "Kniha", lang: "CZ" },
-          { id: "book", label: "Βιβλίο", lang: "GR" },
-          { id: "pencil", label: "Tužka", lang: "CZ" },
-          { id: "pencil", label: "Μολύβι", lang: "GR" },
-          { id: "ball", label: "Míč", lang: "CZ" },
-          { id: "ball", label: "Μπάλα", lang: "GR" },
-          { id: "play", label: "Hřiště", lang: "CZ" },
-          { id: "play", label: "Παιδική χαρά", lang: "GR" },
-          { id: "draw", label: "Kreslit", lang: "CZ" },
-          { id: "draw", label: "Ζωγραφίζω", lang: "GR" }
         ]
       },
-      "6": {
-        title: "Lekce 6 — V parku",
-        actors: "Luna ↔ Táta",
+      {
+        id: "6",
+        title: "Park a piknik",
         storyActors: {
           left: { name: "Luna", icon: "🧒" },
           right: { name: "Táta", icon: "👨" }
         },
-        words: [],
+        words: [
+          { cz: "Park", gr: "Πάρκο", color: "var(--mint)", icon: "🌳" },
+          { cz: "Lavička", gr: "Παγκάκι", color: "var(--sun)", icon: "🪑" },
+          { cz: "Míč", gr: "Μπάλα", color: "var(--sky)", icon: "⚽" },
+          { cz: "Pes", gr: "Σκύλος", color: "var(--coral)", icon: "🐕" },
+          { cz: "Květina", gr: "Λουλούδι", color: "var(--violet)", icon: "🌸" },
+          { cz: "Deka", gr: "Κουβέρτα", color: "var(--sun)", icon: "🧺" }
+        ],
         flashcards: [
           { front: "Park", back: "Πάρκο", example: "Jdeme do parku.", exampleGr: "Πάμε στο πάρκο.", icon: "🌳" },
           { front: "Lavička", back: "Παγκάκι", example: "Sedím na lavičce.", exampleGr: "Κάθομαι στο παγκάκι.", icon: "🪑" },
           { front: "Květina", back: "Λουλούδι", example: "Květina voní.", exampleGr: "Το λουλούδι μυρίζει.", icon: "🌸" },
-          { front: "Míč", back: "Μπάλα", example: "Míč skáče.", exampleGr: "Η μπάλα πηδάει.", icon: "⚽" },
-          { front: "Pes", back: "Σκύλος", example: "Pes běží.", exampleGr: "Ο σκύλος τρέχει.", icon: "🐕" },
-          { front: "Dítě", back: "Παιδί", example: "Dítě se směje.", exampleGr: "Το παιδί γελάει.", icon: "🧒" }
+          { front: "Pes", back: "Σκύλος", example: "Pes běží.", exampleGr: "Ο σκύλος τρέχει.", icon: "🐕" }
         ],
         gestures: [
-          { label: "Sedni na lavičku!", desc: "Posaď se jako v parku.", descGr: "Κάτσε σαν στο πάρκο.", tone: 600 },
-          { label: "Hoď míč!", desc: "Naznač hod rukou.", descGr: "Κάνε πως πετάς μπάλα.", tone: 540 }
+          { label: "Sedni na lavičku!", desc: "Sedni si na lavičku.", descGr: "Κάτσε στο παγκάκι.", tone: 600 },
+          { label: "Hoď míč!", desc: "Hoď míč (naznač rukou).", descGr: "Πέτα την μπάλα (κίνηση χεριού).", tone: 540 }
         ],
         phrases: [
           { cz: "Jdu do parku.", gr: "Πάω στο πάρκο.", tone: 520 },
-          { cz: "Sedíme na lavičce.", gr: "Καθόμαστε στο παγκάκι.", tone: 540 },
+          { cz: "Rozlož deku.", gr: "Άπλωσε την κουβέρτα.", tone: 540 },
           { cz: "Pes běží.", gr: "Ο σκύλος τρέχει.", tone: 560 }
         ],
-        pexeso: [],
         story: [
           { who: "Luna", line: "Ahoj, tati! Jdeme do parku?", gr: "Γεια, μπαμπά! Πάμε στο πάρκο;", icon: "🧒", side: "left" },
-          { who: "Táta", line: "Ano, pojď, je tam lavička.", gr: "Ναι, έλα, έχει ένα παγκάκι.", icon: "👨", side: "right" },
+          { who: "Táta", line: "Ano, nesu deku.", gr: "Ναι, φέρνω την κουβέρτα.", icon: "👨", side: "right" },
           { who: "Luna", line: "Sedneme si a hodím míč.", gr: "Καθόμαστε και πετάω την μπάλα.", icon: "⚽", side: "left" },
           { who: "Táta", line: "Vidím psa, běží pro míč.", gr: "Βλέπω έναν σκύλο, τρέχει για την μπάλα.", icon: "🐕", side: "right" },
           { who: "Luna", line: "Květina tady krásně voní.", gr: "Το λουλούδι εδώ μυρίζει όμορφα.", icon: "🌸", side: "left" },
-          { who: "Táta", line: "Park je hezký, že?", gr: "Όμορφο πάρκο, έτσι;", icon: "😊", side: "right" },
-          { who: "Luna", line: "Ano, ale chci už domů.", gr: "Ναι, αλλά θέλω να πάω σπίτι.", icon: "🧒", side: "left" }
+          { who: "Táta", line: "Piknik je hotový!", gr: "Το πικνίκ είναι έτοιμο!", icon: "🍉", side: "right" }
+        ]
+      },
+      {
+        id: "7",
+        title: "Počasí a roční doby",
+        words: [
+          { cz: "Slunce", gr: "Ήλιος", color: "var(--sun)", icon: "☀️" },
+          { cz: "Déšť", gr: "Βροχή", color: "var(--sky)", icon: "🌧️" },
+          { cz: "Vítr", gr: "Άνεμος", color: "var(--mint)", icon: "💨" },
+          { cz: "Sníh", gr: "Χιόνι", color: "var(--violet)", icon: "❄️" },
+          { cz: "Jaro", gr: "Άνοιξη", color: "var(--mint)", icon: "🌷" },
+          { cz: "Léto", gr: "Καλοκαίρι", color: "var(--coral)", icon: "🏖️" },
+          { cz: "Podzim", gr: "Φθινόπωρο", color: "var(--sun)", icon: "🍂" },
+          { cz: "Zima", gr: "Χειμώνας", color: "var(--sky)", icon: "🧤" }
+        ],
+        flashcards: [
+          { front: "Slunce", back: "Ήλιος", example: "Slunce hřeje.", exampleGr: "Ο ήλιος ζεσταίνει.", icon: "☀️" },
+          { front: "Déšť", back: "Βροχή", example: "Prší venku.", exampleGr: "Βρέχει έξω.", icon: "🌧️" },
+          { front: "Sníh", back: "Χιόνι", example: "Sněží bíle.", exampleGr: "Χιονίζει λευκά.", icon: "❄️" },
+          { front: "Jaro", back: "Άνοιξη", example: "Jaro kvete.", exampleGr: "Η άνοιξη ανθίζει.", icon: "🌷" },
+          { front: "Léto", back: "Καλοκαίρι", example: "Léto je teplé.", exampleGr: "Το καλοκαίρι είναι ζεστό.", icon: "🏖️" },
+          { front: "Podzim", back: "Φθινόπωρο", example: "Podzim padá listí.", exampleGr: "Το φθινόπωρο πέφτουν τα φύλλα.", icon: "🍂" },
+          { front: "Zima", back: "Χειμώνας", example: "Zima je studená.", exampleGr: "Ο χειμώνας είναι κρύος.", icon: "🧤" }
+        ],
+        phrases: [
+          { cz: "Prší.", gr: "Βρέχει.", tone: 520 },
+          { cz: "Je jaro.", gr: "Είναι άνοιξη.", tone: 520 },
+          { cz: "Je léto.", gr: "Είναι καλοκαίρι.", tone: 560 },
+          { cz: "Je podzim.", gr: "Είναι φθινόπωρο.", tone: 540 },
+          { cz: "Je zima.", gr: "Κάνει κρύο.", tone: 580 }
+        ],
+        listen: [
+          {
+            prompt: "Χιόνι",
+            options: [
+              { label: "Sníh", icon: "❄️", correct: true },
+              { label: "Vítr", icon: "💨" },
+              { label: "Slunce", icon: "☀️" }
+            ]
+          }
+        ],
+        fill: [
+          {
+            prompt: "Venku ____.",
+            promptGr: "Έξω ____.",
+            options: [
+              { gr: "βρέχει", correct: true },
+              { gr: "τρώω" },
+              { gr: "κοιμάμαι" }
+            ]
+          },
+          {
+            prompt: "Je ____ (kvete všechno).",
+            promptGr: "Είναι ____ (ανθίζουν όλα).",
+            options: [
+              { gr: "άνοιξη", correct: true },
+              { gr: "καλοκαίρι" },
+              { gr: "χειμώνας" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "8",
+        title: "Oblečení",
+        words: [
+          { cz: "Tričko", gr: "Μπλούζα", color: "var(--sun)", icon: "👕" },
+          { cz: "Bunda", gr: "Μπουφάν", color: "var(--sky)", icon: "🧥" },
+          { cz: "Boty", gr: "Παπούτσια", color: "var(--mint)", icon: "👟" },
+          { cz: "Čepice", gr: "Καπέλο", color: "var(--violet)", icon: "🧢" },
+          { cz: "Kalhoty", gr: "Παντελόνι", color: "var(--coral)", icon: "👖" }
+        ],
+        flashcards: [
+          { front: "Tričko", back: "Μπλούζα", example: "Tričko je modré.", exampleGr: "Η μπλούζα είναι μπλε.", icon: "👕" },
+          { front: "Bunda", back: "Μπουφάν", example: "Bunda je teplá.", exampleGr: "Το μπουφάν είναι ζεστό.", icon: "🧥" },
+          { front: "Boty", back: "Παπούτσια", example: "Boty jsou čisté.", exampleGr: "Τα παπούτσια είναι καθαρά.", icon: "👟" },
+          { front: "Čepice", back: "Καπέλο", example: "Mám čepici.", exampleGr: "Έχω καπέλο.", icon: "🧢" }
+        ],
+        gestures: [
+          { label: "Oblékni tričko!", desc: "Oblékni si tričko.", descGr: "Φόρα την μπλούζα.", tone: 600 },
+          { label: "Obuj boty!", desc: "Obuj si boty a uvaž tkaničky.", descGr: "Φόρα τα παπούτσια και δέσε κορδόνια.", tone: 520 }
+        ],
+        phrases: [
+          { cz: "Je mi zima, vezmu bundu.", gr: "Κρυώνω, παίρνω το μπουφάν.", tone: 540 },
+          { cz: "Mám nové boty.", gr: "Έχω καινούρια παπούτσια.", tone: 520 }
+        ],
+        pairs: [
+          { left: "Tričko", right: "Μπλούζα" },
+          { left: "Bunda", right: "Μπουφάν" },
+          { left: "Boty", right: "Παπούτσια" }
+        ]
+      },
+      {
+        id: "9",
+        title: "Tělo a zdraví",
+        words: [
+          { cz: "Hlava", gr: "Κεφάλι", color: "var(--sun)", icon: "🙂" },
+          { cz: "Ruka", gr: "Χέρι", color: "var(--sky)", icon: "✋" },
+          { cz: "Noha", gr: "Πόδι", color: "var(--mint)", icon: "🦵" },
+          { cz: "Oči", gr: "Μάτια", color: "var(--violet)", icon: "👀" },
+          { cz: "Bříško", gr: "Κοιλιά", color: "var(--coral)", icon: "🤰" }
+        ],
+        flashcards: [
+          { front: "Hlava", back: "Κεφάλι", example: "Zakruť hlavou.", exampleGr: "Κούνα το κεφάλι.", icon: "🙂" },
+          { front: "Ruka", back: "Χέρι", example: "Zvedni ruku.", exampleGr: "Σήκωσε το χέρι.", icon: "✋" },
+          { front: "Oči", back: "Μάτια", example: "Oči vidí.", exampleGr: "Τα μάτια βλέπουν.", icon: "👀" },
+          { front: "Bříško", back: "Κοιλιά", example: "Bříško kručí.", exampleGr: "Η κοιλιά γουργουρίζει.", icon: "🤰" }
+        ],
+        phrases: [
+          { cz: "Bolí mě bříško.", gr: "Πονάει η κοιλιά μου.", tone: 520 },
+          { cz: "Zavři oči.", gr: "Κλείσε τα μάτια.", tone: 540 },
+          { cz: "Zvedni ruku.", gr: "Σήκωσε το χέρι.", tone: 560 }
+        ],
+        listen: [
+          {
+            prompt: "Χέρι",
+            options: [
+              { label: "Ruka", icon: "✋", correct: true },
+              { label: "Hlava", icon: "🙂" },
+              { label: "Noha", icon: "🦵" }
+            ]
+          }
+        ],
+        soundHunt: [
+          {
+            prompt: "Πονάει η κοιλιά μου.",
+            options: [
+              { label: "Bolí mě bříško.", icon: "🤰", correct: true },
+              { label: "Vidím očima.", icon: "👀" },
+              { label: "Zvedni ruku.", icon: "✋" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "10",
+        title: "Zvířata a zoo",
+        words: [
+          { cz: "Pes", gr: "Σκύλος", color: "var(--coral)", icon: "🐕" },
+          { cz: "Kočka", gr: "Γάτα", color: "var(--violet)", icon: "🐈" },
+          { cz: "Pták", gr: "Πουλί", color: "var(--sky)", icon: "🕊️" },
+          { cz: "Ryba", gr: "Ψάρι", color: "var(--mint)", icon: "🐟" },
+          { cz: "Lev", gr: "Λιοντάρι", color: "var(--sun)", icon: "🦁" },
+          { cz: "Slon", gr: "Ελέφαντας", color: "var(--sun)", icon: "🐘" }
+        ],
+        flashcards: [
+          { front: "Pes", back: "Σκύλος", example: "Pes štěká.", exampleGr: "Ο σκύλος γαβγίζει.", icon: "🐕" },
+          { front: "Kočka", back: "Γάτα", example: "Kočka přede.", exampleGr: "Η γάτα γουργουρίζει.", icon: "🐈" },
+          { front: "Lev", back: "Λιοντάρι", example: "Lev řve.", exampleGr: "Το λιοντάρι βρυχάται.", icon: "🦁" },
+          { front: "Slon", back: "Ελέφαντας", example: "Slon je velký.", exampleGr: "Ο ελέφαντας είναι μεγάλος.", icon: "🐘" }
+        ],
+        gestures: [
+          { label: "Zamňoukej!", desc: "Udělej zvuk kočky.", descGr: "Κάνε ήχο γάτας.", tone: 520 },
+          { label: "Zaryč!", desc: "Zkus řev lva.", descGr: "Κάνε τον ήχο του λιονταριού.", tone: 620 }
+        ],
+        phrases: [
+          { cz: "Pes běží.", gr: "Ο σκύλος τρέχει.", tone: 520 },
+          { cz: "Lev je silný.", gr: "Το λιοντάρι είναι δυνατό.", tone: 560 }
+        ],
+        sentences: [
+          {
+            prompt: "Kočka spí.",
+            options: [
+              { gr: "Η γάτα κοιμάται.", correct: true },
+              { gr: "Το ψάρι κολυμπά." },
+              { gr: "Ο σκύλος τρέχει." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "11",
+        title: "Farma a zahrada",
+        words: [
+          { cz: "Kráva", gr: "Αγελάδα", color: "var(--sun)", icon: "🐄" },
+          { cz: "Kůň", gr: "Άλογο", color: "var(--sky)", icon: "🐎" },
+          { cz: "Kuře", gr: "Κοτόπουλο", color: "var(--mint)", icon: "🐥" },
+          { cz: "Traktor", gr: "Τρακτέρ", color: "var(--coral)", icon: "🚜" },
+          { cz: "Mrkev", gr: "Καρότο", color: "var(--violet)", icon: "🥕" },
+          { cz: "Zahrada", gr: "Κήπος", color: "var(--sun)", icon: "🌱" }
+        ],
+        flashcards: [
+          { front: "Kráva", back: "Αγελάδα", example: "Kráva dává mléko.", exampleGr: "Η αγελάδα δίνει γάλα.", icon: "🐄" },
+          { front: "Kůň", back: "Άλογο", example: "Kůň běží rychle.", exampleGr: "Το άλογο τρέχει γρήγορα.", icon: "🐎" },
+          { front: "Kuře", back: "Κοτόπουλο", example: "Kuře kdáká.", exampleGr: "Το κοτόπουλο κακαρίζει.", icon: "🐥" },
+          { front: "Traktor", back: "Τρακτέρ", example: "Traktor je hlučný.", exampleGr: "Το τρακτέρ κάνει θόρυβο.", icon: "🚜" }
+        ],
+        phrases: [
+          { cz: "Jdeme na farmu.", gr: "Πάμε στη φάρμα.", tone: 520 },
+          { cz: "Zalij mrkev.", gr: "Πότισε το καρότο.", tone: 540 }
+        ],
+        tasks: [
+          { text: "Najdi traktor.", gr: "Βρες το τρακτέρ.", tone: 560 },
+          { text: "Nakrmit kuře.", gr: "Ταΐσε το κοτόπουλο.", tone: 520 }
+        ]
+      },
+      {
+        id: "12",
+        title: "Město a doprava",
+        words: [
+          { cz: "Auto", gr: "Αυτοκίνητο", color: "var(--sky)", icon: "🚗" },
+          { cz: "Autobus", gr: "Λεωφορείο", color: "var(--sun)", icon: "🚌" },
+          { cz: "Ulice", gr: "Δρόμος", color: "var(--mint)", icon: "🛣️" },
+          { cz: "Most", gr: "Γέφυρα", color: "var(--violet)", icon: "🌉" },
+          { cz: "Semafor", gr: "Φανάρι", color: "var(--coral)", icon: "🚦" },
+          { cz: "Metro", gr: "Μετρό", color: "var(--sun)", icon: "🚇" }
+        ],
+        flashcards: [
+          { front: "Autobus", back: "Λεωφορείο", example: "Autobus přijíždí.", exampleGr: "Έρχεται το λεωφορείο.", icon: "🚌" },
+          { front: "Auto", back: "Αυτοκίνητο", example: "Auto je rychlé.", exampleGr: "Το αυτοκίνητο είναι γρήγορο.", icon: "🚗" },
+          { front: "Semafor", back: "Φανάρι", example: "Semafor svítí zeleně.", exampleGr: "Το φανάρι δείχνει πράσινο.", icon: "🚦" },
+          { front: "Most", back: "Γέφυρα", example: "Most je dlouhý.", exampleGr: "Η γέφυρα είναι μακριά.", icon: "🌉" }
+        ],
+        phrases: [
+          { cz: "Autobus přijíždí.", gr: "Το λεωφορείο φτάνει.", tone: 520 },
+          { cz: "Čekám na zelenou.", gr: "Περιμένω το πράσινο.", tone: 540 }
+        ],
+        listen: [
+          {
+            prompt: "Φανάρι",
+            options: [
+              { label: "Semafor", icon: "🚦", correct: true },
+              { label: "Most", icon: "🌉" },
+              { label: "Ulice", icon: "🛣️" }
+            ]
+          }
+        ],
+        sequence: [
+          { label: "Červená", detail: "Κόκκινο" },
+          { label: "Oranžová", detail: "Πορτοκαλί" },
+          { label: "Zelená", detail: "Πράσινο" }
+        ],
+        soundHunt: [
+          {
+            prompt: "Το λεωφορείο ήρθε.",
+            options: [
+              { label: "Autobus přijel.", icon: "🚌", correct: true },
+              { label: "Auto je rychlé.", icon: "🚗" },
+              { label: "Most je dlouhý.", icon: "🌉" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "13",
+        title: "Nakupování",
+        words: [
+          { cz: "Obchod", gr: "Κατάστημα", color: "var(--sun)", icon: "🏪" },
+          { cz: "Košík", gr: "Καλάθι", color: "var(--mint)", icon: "🧺" },
+          { cz: "Peněženka", gr: "Πορτοφόλι", color: "var(--violet)", icon: "👛" },
+          { cz: "Pokladna", gr: "Ταμείο", color: "var(--coral)", icon: "💳" },
+          { cz: "Taška", gr: "Τσάντα", color: "var(--sky)", icon: "🛍️" }
+        ],
+        flashcards: [
+          { front: "Obchod", back: "Κατάστημα", example: "Obchod je velký.", exampleGr: "Το κατάστημα είναι μεγάλο.", icon: "🏪" },
+          { front: "Košík", back: "Καλάθι", example: "Vezmi košík.", exampleGr: "Πάρε καλάθι.", icon: "🧺" },
+          { front: "Peněženka", back: "Πορτοφόλι", example: "Peněženka je plná.", exampleGr: "Το πορτοφόλι είναι γεμάτο.", icon: "👛" },
+          { front: "Pokladna", back: "Ταμείο", example: "Jdeme k pokladně.", exampleGr: "Πάμε στο ταμείο.", icon: "💳" }
+        ],
+        phrases: [
+          { cz: "Kolik to stojí?", gr: "Πόσο κοστίζει;", tone: 520 },
+          { cz: "Mám tašku.", gr: "Έχω τσάντα.", tone: 540 }
+        ],
+        fill: [
+          {
+            prompt: "Jdeme do ____.",
+            promptGr: "Πάμε στο ____.",
+            options: [
+              { gr: "κατάστημα", correct: true },
+              { gr: "σπίτι" },
+              { gr: "σχολείο" }
+            ]
+          }
+        ],
+        pairs: [
+          { left: "Obchod", right: "Κατάστημα" },
+          { left: "Taška", right: "Τσάντα" },
+          { left: "Pokladna", right: "Ταμείο" }
+        ]
+      },
+      {
+        id: "14",
+        title: "Čas a dny",
+        words: [
+          { cz: "Pondělí", gr: "Δευτέρα", color: "var(--sun)", icon: "1️⃣" },
+          { cz: "Úterý", gr: "Τρίτη", color: "var(--sky)", icon: "2️⃣" },
+          { cz: "Středa", gr: "Τετάρτη", color: "var(--mint)", icon: "3️⃣" },
+          { cz: "Čtvrtek", gr: "Πέμπτη", color: "var(--violet)", icon: "4️⃣" },
+          { cz: "Pátek", gr: "Παρασκευή", color: "var(--coral)", icon: "5️⃣" },
+          { cz: "Sobota", gr: "Σάββατο", color: "var(--sun)", icon: "6️⃣" },
+          { cz: "Neděle", gr: "Κυριακή", color: "var(--sky)", icon: "7️⃣" },
+          { cz: "Ráno", gr: "Πρωί", color: "var(--mint)", icon: "🌅" },
+          { cz: "Večer", gr: "Βράδυ", color: "var(--violet)", icon: "🌙" },
+          { cz: "Hodiny", gr: "Ρολόι", color: "var(--coral)", icon: "⏰" }
+        ],
+        flashcards: [
+          { front: "Pondělí", back: "Δευτέρα", example: "V pondělí jdu do školy.", exampleGr: "Τη Δευτέρα πάω σχολείο.", icon: "1️⃣" },
+          { front: "Úterý", back: "Τρίτη", example: "V úterý čtu knihu.", exampleGr: "Την Τρίτη διαβάζω βιβλίο.", icon: "2️⃣" },
+          { front: "Středa", back: "Τετάρτη", example: "Ve středu jdu plavat.", exampleGr: "Την Τετάρτη πάω για κολύμπι.", icon: "3️⃣" },
+          { front: "Čtvrtek", back: "Πέμπτη", example: "Ve čtvrtek kreslím.", exampleGr: "Την Πέμπτη ζωγραφίζω.", icon: "4️⃣" },
+          { front: "Pátek", back: "Παρασκευή", example: "V pátek mám hudbu.", exampleGr: "Την Παρασκευή έχω μουσική.", icon: "5️⃣" },
+          { front: "Sobota", back: "Σάββατο", example: "V sobotu hraju venku.", exampleGr: "Το Σάββατο παίζω έξω.", icon: "6️⃣" },
+          { front: "Neděle", back: "Κυριακή", example: "V neděli odpočívám.", exampleGr: "Την Κυριακή ξεκουράζομαι.", icon: "7️⃣" },
+          { front: "Ráno", back: "Πρωί", example: "Ráno snídám.", exampleGr: "Το πρωί τρώω πρωινό.", icon: "🌅" },
+          { front: "Večer", back: "Βράδυ", example: "Večer spím.", exampleGr: "Το βράδυ κοιμάμαι.", icon: "🌙" }
+        ],
+        phrases: [
+          { cz: "Kolik je hodin?", gr: "Τι ώρα είναι;", tone: 540 },
+          { cz: "Ráno vstávám.", gr: "Το πρωί ξυπνάω.", tone: 520 }
+        ],
+        sentences: [
+          {
+            prompt: "Večer spím.",
+            options: [
+              { gr: "Το βράδυ κοιμάμαι.", correct: true },
+              { gr: "Το πρωί τρώω." },
+              { gr: "Τη Δευτέρα παίζω." }
+            ]
+          }
+        ],
+        sequence: [
+          { label: "Pondělí", detail: "Δευτέρα" },
+          { label: "Úterý", detail: "Τρίτη" },
+          { label: "Středa", detail: "Τετάρτη" },
+          { label: "Čtvrtek", detail: "Πέμπτη" },
+          { label: "Pátek", detail: "Παρασκευή" },
+          { label: "Sobota", detail: "Σάββατο" },
+          { label: "Neděle", detail: "Κυριακή" }
+        ]
+      },
+      {
+        id: "15",
+        title: "Denní rutina",
+        words: [
+          { cz: "Vstát", gr: "Ξυπνάω", color: "var(--sun)", icon: "⏰" },
+          { cz: "Snídaně", gr: "Πρωινό", color: "var(--mint)", icon: "🥣" },
+          { cz: "Zuby", gr: "Δόντια", color: "var(--sky)", icon: "🦷" },
+          { cz: "Škola", gr: "Σχολείο", color: "var(--violet)", icon: "🏫" },
+          { cz: "Spát", gr: "Κοιμάμαι", color: "var(--coral)", icon: "😴" }
+        ],
+        flashcards: [
+          { front: "Vstát", back: "Ξυπνάω", example: "Ráno vstanu.", exampleGr: "Το πρωί ξυπνάω.", icon: "⏰" },
+          { front: "Snídaně", back: "Πρωινό", example: "Snídám kaši.", exampleGr: "Τρώω πρωινό κουάκερ.", icon: "🥣" },
+          { front: "Zuby", back: "Δόντια", example: "Čistím si zuby.", exampleGr: "Πλένω τα δόντια μου.", icon: "🦷" },
+          { front: "Spát", back: "Κοιμάμαι", example: "V noci spím.", exampleGr: "Το βράδυ κοιμάμαι.", icon: "😴" }
+        ],
+        phrases: [
+          { cz: "Jdu čistit zuby.", gr: "Πάω να πλύνω τα δόντια.", tone: 520 },
+          { cz: "Čas do školy!", gr: "Ώρα για σχολείο!", tone: 560 }
+        ],
+        listen: [
+          {
+            prompt: "Κοιμάμαι",
+            options: [
+              { label: "Spát", icon: "😴", correct: true },
+              { label: "Snídaně", icon: "🥣" },
+              { label: "Zuby", icon: "🦷" }
+            ]
+          }
+        ],
+        tasks: [
+          { text: "Umyj si zuby.", gr: "Πλύνε τα δόντια σου.", tone: 540 },
+          { text: "Připrav batoh.", gr: "Ετοίμασε την τσάντα.", tone: 560 }
+        ]
+      },
+      {
+        id: "16",
+        title: "Kuchyně a vaření",
+        words: [
+          { cz: "Hrnec", gr: "Κατσαρόλα", color: "var(--sun)", icon: "🥘" },
+          { cz: "Pánev", gr: "Τηγάνι", color: "var(--mint)", icon: "🍳" },
+          { cz: "Lžíce", gr: "Κουτάλι", color: "var(--sky)", icon: "🥄" },
+          { cz: "Talíř", gr: "Πιάτο", color: "var(--violet)", icon: "🍽️" },
+          { cz: "Polévka", gr: "Σούπα", color: "var(--coral)", icon: "🍲" }
+        ],
+        flashcards: [
+          { front: "Hrnec", back: "Κατσαρόλα", example: "Hrnec je horký.", exampleGr: "Η κατσαρόλα είναι ζεστή.", icon: "🥘" },
+          { front: "Pánev", back: "Τηγάνι", example: "Na pánvi smažím.", exampleGr: "Στο τηγάνι τηγανίζω.", icon: "🍳" },
+          { front: "Lžíce", back: "Κουτάλι", example: "Míchám lžící.", exampleGr: "Ανακατεύω με κουτάλι.", icon: "🥄" },
+          { front: "Polévka", back: "Σούπα", example: "Polévka je teplá.", exampleGr: "Η σούπα είναι ζεστή.", icon: "🍲" }
+        ],
+        gestures: [
+          { label: "Zamíchej!", desc: "Zamíchej polévku.", descGr: "Ανακάτεψε τη σούπα.", tone: 560 },
+          { label: "Přines talíř!", desc: "Přines talíř ke stolu.", descGr: "Φέρε ένα πιάτο στο τραπέζι.", tone: 520 }
+        ],
+        phrases: [
+          { cz: "Míchám polévku.", gr: "Ανακατεύω τη σούπα.", tone: 540 },
+          { cz: "Dej lžíci.", gr: "Δώσε κουτάλι.", tone: 520 }
+        ],
+        soundHunt: [
+          {
+            prompt: "Δώσε κουτάλι.",
+            options: [
+              { label: "Dej lžíci.", icon: "🥄", correct: true },
+              { label: "Polož talíř.", icon: "🍽️" },
+              { label: "Zamíchej v hrnci.", icon: "🥘" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "17",
+        title: "Hudba a koníčky",
+        words: [
+          { cz: "Zpívat", gr: "Τραγουδώ", color: "var(--sun)", icon: "🎤" },
+          { cz: "Tancovat", gr: "Χορεύω", color: "var(--mint)", icon: "🕺" },
+          { cz: "Malovat", gr: "Ζωγραφίζω", color: "var(--coral)", icon: "🎨" },
+          { cz: "Číst", gr: "Διαβάζω", color: "var(--violet)", icon: "📖" },
+          { cz: "Kytara", gr: "Κιθάρα", color: "var(--sky)", icon: "🎸" }
+        ],
+        flashcards: [
+          { front: "Zpívat", back: "Τραγουδώ", example: "Zpívám píseň.", exampleGr: "Τραγουδώ ένα τραγούδι.", icon: "🎤" },
+          { front: "Tancovat", back: "Χορεύω", example: "Tancuji s kamarády.", exampleGr: "Χορεύω με φίλους.", icon: "🕺" },
+          { front: "Malovat", back: "Ζωγραφίζω", example: "Maluj dům.", exampleGr: "Ζωγράφισε ένα σπίτι.", icon: "🎨" },
+          { front: "Kytara", back: "Κιθάρα", example: "Hraji na kytaru.", exampleGr: "Παίζω κιθάρα.", icon: "🎸" }
+        ],
+        phrases: [
+          { cz: "Poslouchám hudbu.", gr: "Ακούω μουσική.", tone: 520 },
+          { cz: "Chci si zatančit.", gr: "Θέλω να χορέψω.", tone: 540 }
+        ],
+        listen: [
+          {
+            prompt: "Τραγουδώ",
+            options: [
+              { label: "Zpívat", icon: "🎤", correct: true },
+              { label: "Malovat", icon: "🎨" },
+              { label: "Číst", icon: "📖" }
+            ]
+          }
+        ],
+        storyActors: {
+          left: { name: "Luna", icon: "🧒" },
+          right: { name: "Kamil", icon: "🧑" }
+        },
+        story: [
+          { who: "Luna", line: "Namalujme plakát.", gr: "Ας ζωγραφίσουμε μια αφίσα.", icon: "🎨", side: "left" },
+          { who: "Kamil", line: "Já zahraju na kytaru.", gr: "Εγώ θα παίξω κιθάρα.", icon: "🎸", side: "right" },
+          { who: "Luna", line: "Zpívám s tebou.", gr: "Τραγουδάω μαζί σου.", icon: "🎤", side: "left" }
+        ]
+      },
+      {
+        id: "18",
+        title: "Sporty",
+        words: [
+          { cz: "Běh", gr: "Τρέξιμο", color: "var(--sky)", icon: "🏃" },
+          { cz: "Skok", gr: "Άλμα", color: "var(--mint)", icon: "🤸" },
+          { cz: "Plavání", gr: "Κολύμπι", color: "var(--violet)", icon: "🏊" },
+          { cz: "Fotbal", gr: "Ποδόσφαιρο", color: "var(--coral)", icon: "⚽" },
+          { cz: "Kolo", gr: "Ποδήλατο", color: "var(--sun)", icon: "🚲" }
+        ],
+        flashcards: [
+          { front: "Běh", back: "Τρέξιμο", example: "Běžíme rychle.", exampleGr: "Τρέχουμε γρήγορα.", icon: "🏃" },
+          { front: "Plavání", back: "Κολύμπι", example: "Plavu v bazénu.", exampleGr: "Κολυμπώ στην πισίνα.", icon: "🏊" },
+          { front: "Fotbal", back: "Ποδόσφαιρο", example: "Hraju fotbal.", exampleGr: "Παίζω ποδόσφαιρο.", icon: "⚽" },
+          { front: "Kolo", back: "Ποδήλατο", example: "Jedeme na kole.", exampleGr: "Πηγαίνουμε με ποδήλατο.", icon: "🚲" }
+        ],
+        gestures: [
+          { label: "Skok!", desc: "Udělaj malý skok.", descGr: "Κάνε ένα μικρό άλμα.", tone: 540 },
+          { label: "Plav rukama!", desc: "Plav rukama jako ve vodě.", descGr: "Κολύμπα με τα χέρια.", tone: 520 }
+        ],
+        phrases: [
+          { cz: "Miluji sport.", gr: "Αγαπώ τον αθλητισμό.", tone: 520 },
+          { cz: "Hrajeme fotbal.", gr: "Παίζουμε ποδόσφαιρο.", tone: 560 }
+        ],
+        sentences: [
+          {
+            prompt: "Jedeme na kole.",
+            options: [
+              { gr: "Πηγαίνουμε με ποδήλατο.", correct: true },
+              { gr: "Κολυμπώ στην πισίνα." },
+              { gr: "Τρέχω γρήγορα." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "19",
+        title: "Příroda a les",
+        words: [
+          { cz: "Strom", gr: "Δέντρο", color: "var(--sun)", icon: "🌳" },
+          { cz: "Řeka", gr: "Ποτάμι", color: "var(--sky)", icon: "🏞️" },
+          { cz: "Kámen", gr: "Πέτρα", color: "var(--mint)", icon: "🪨" },
+          { cz: "Houba", gr: "Μανιτάρι", color: "var(--violet)", icon: "🍄" },
+          { cz: "Liška", gr: "Αλεπού", color: "var(--coral)", icon: "🦊" }
+        ],
+        flashcards: [
+          { front: "Strom", back: "Δέντρο", example: "Strom je vysoký.", exampleGr: "Το δέντρο είναι ψηλό.", icon: "🌳" },
+          { front: "Řeka", back: "Ποτάμι", example: "Řeka teče.", exampleGr: "Το ποτάμι ρέει.", icon: "🏞️" },
+          { front: "Houba", back: "Μανιτάρι", example: "Najdu houbu.", exampleGr: "Βρίσκω ένα μανιτάρι.", icon: "🍄" },
+          { front: "Liška", back: "Αλεπού", example: "Liška je rychlá.", exampleGr: "Η αλεπού είναι γρήγορη.", icon: "🦊" }
+        ],
+        phrases: [
+          { cz: "Jdeme do lesa.", gr: "Πάμε στο δάσος.", tone: 520 },
+          { cz: "Řeka je čistá.", gr: "Το ποτάμι είναι καθαρό.", tone: 540 }
+        ],
+        tasks: [
+          { text: "Najdi dva stromy.", gr: "Βρες δύο δέντρα.", tone: 560 },
+          { text: "Poslouchej řeku.", gr: "Άκου το ποτάμι.", tone: 520 }
+        ]
+      },
+      {
+        id: "20",
+        title: "Pláž a voda",
+        words: [
+          { cz: "Písek", gr: "Άμμος", color: "var(--sun)", icon: "🏖️" },
+          { cz: "Moře", gr: "Θάλασσα", color: "var(--sky)", icon: "🌊" },
+          { cz: "Ručník", gr: "Πετσέτα", color: "var(--mint)", icon: "🧺" },
+          { cz: "Mušle", gr: "Κοχύλι", color: "var(--violet)", icon: "🐚" },
+          { cz: "Plavky", gr: "Μαγιό", color: "var(--coral)", icon: "🩱" }
+        ],
+        flashcards: [
+          { front: "Písek", back: "Άμμος", example: "Písek je teplý.", exampleGr: "Η άμμος είναι ζεστή.", icon: "🏖️" },
+          { front: "Moře", back: "Θάλασσα", example: "Moře šumí.", exampleGr: "Η θάλασσα κάνει ήχο.", icon: "🌊" },
+          { front: "Mušle", back: "Κοχύλι", example: "Sbírám mušle.", exampleGr: "Μαζεύω κοχύλια.", icon: "🐚" },
+          { front: "Plavky", back: "Μαγιό", example: "Obléknu si plavky.", exampleGr: "Φοράω μαγιό.", icon: "🩱" }
+        ],
+        gestures: [
+          { label: "Postav hrad!", desc: "Postav hrad z písku.", descGr: "Φτιάξε κάστρο στην άμμο.", tone: 560 }
+        ],
+        phrases: [
+          { cz: "Jdeme k moři.", gr: "Πάμε στη θάλασσα.", tone: 520 },
+          { cz: "Polož ručník.", gr: "Βάλε την πετσέτα.", tone: 540 }
+        ],
+        fill: [
+          {
+            prompt: "Sbírám ____.",
+            promptGr: "Μαζεύω ____.",
+            options: [
+              { gr: "κοχύλια", correct: true },
+              { gr: "βιβλία" },
+              { gr: "μήλα" }
+            ]
+          }
+        ],
+        soundHunt: [
+          {
+            prompt: "Πάμε στη θάλασσα.",
+            options: [
+              { label: "Pojďme k moři.", icon: "🌊", correct: true },
+              { label: "Postav hrad z písku.", icon: "🏖️" },
+              { label: "Polož ručník.", icon: "🧺" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "21",
+        title: "Pocity",
+        words: [
+          { cz: "Šťastný", gr: "Χαρούμενος", color: "var(--sun)", icon: "😊" },
+          { cz: "Smutný", gr: "Λυπημένος", color: "var(--sky)", icon: "😢" },
+          { cz: "Unavený", gr: "Κουρασμένος", color: "var(--mint)", icon: "🥱" },
+          { cz: "Hladový", gr: "Πεινασμένος", color: "var(--coral)", icon: "😋" },
+          { cz: "Překvapený", gr: "Έκπληκτος", color: "var(--violet)", icon: "😮" }
+        ],
+        flashcards: [
+          { front: "Šťastný", back: "Χαρούμενος", example: "Jsem šťastný.", exampleGr: "Είμαι χαρούμενος.", icon: "😊" },
+          { front: "Smutný", back: "Λυπημένος", example: "Jsem smutný.", exampleGr: "Είμαι λυπημένος.", icon: "😢" },
+          { front: "Unavený", back: "Κουρασμένος", example: "Jsem unavený.", exampleGr: "Είμαι κουρασμένος.", icon: "🥱" },
+          { front: "Hladový", back: "Πεινασμένος", example: "Jsem hladový.", exampleGr: "Πεινάω.", icon: "😋" }
+        ],
+        phrases: [
+          { cz: "Jsem šťastný.", gr: "Είμαι χαρούμενος.", tone: 520 },
+          { cz: "Jsem unavený.", gr: "Είμαι κουρασμένος.", tone: 540 }
+        ],
+        listen: [
+          {
+            prompt: "Πεινάω",
+            options: [
+              { label: "Hladový", icon: "😋", correct: true },
+              { label: "Smutný", icon: "😢" },
+              { label: "Unavený", icon: "🥱" }
+            ]
+          }
+        ],
+        tasks: [
+          { text: "Ukaž radost!", gr: "Δείξε χαρά!", tone: 520 },
+          { text: "Zívni si.", gr: "Κάνε ένα χασμουρητό.", tone: 540 }
+        ]
+      },
+      {
+        id: "22",
+        title: "Tvary a pozice",
+        words: [
+          { cz: "Kruh", gr: "Κύκλος", color: "var(--sun)", icon: "⚪" },
+          { cz: "Čtverec", gr: "Τετράγωνο", color: "var(--mint)", icon: "🟥" },
+          { cz: "Trojúhelník", gr: "Τρίγωνο", color: "var(--violet)", icon: "🔺" },
+          { cz: "Nahoře", gr: "Πάνω", color: "var(--sky)", icon: "⬆️" },
+          { cz: "Dole", gr: "Κάτω", color: "var(--coral)", icon: "⬇️" }
+        ],
+        flashcards: [
+          { front: "Kruh", back: "Κύκλος", example: "Mám kruh.", exampleGr: "Έχω έναν κύκλο.", icon: "⚪" },
+          { front: "Čtverec", back: "Τετράγωνο", example: "Nakresli čtverec.", exampleGr: "Ζωγράφισε τετράγωνο.", icon: "🟥" },
+          { front: "Nahoře", back: "Πάνω", example: "Míč je nahoře.", exampleGr: "Η μπάλα είναι πάνω.", icon: "⬆️" }
+        ],
+        gestures: [
+          { label: "Ukaž nahoru!", desc: "Ukaž prstem nahoru.", descGr: "Δείξε προς τα πάνω.", tone: 520 },
+          { label: "Nakresli trojúhelník!", desc: "Nakresli trojúhelník ve vzduchu.", descGr: "Ζωγράφισε τρίγωνο στον αέρα.", tone: 540 }
+        ],
+        phrases: [
+          { cz: "Míč je dole.", gr: "Η μπάλα είναι κάτω.", tone: 560 },
+          { cz: "Kruh je vedle.", gr: "Ο κύκλος είναι δίπλα.", tone: 540 }
+        ],
+        pairs: [
+          { left: "Kruh", right: "Κύκλος" },
+          { left: "Čtverec", right: "Τετράγωνο" },
+          { left: "Trojúhelník", right: "Τρίγωνο" }
+        ],
+        sequence: [
+          { label: "Nahoře", detail: "Πάνω" },
+          { label: "Vedle", detail: "Δίπλα" },
+          { label: "Dole", detail: "Κάτω" }
+        ]
+      },
+      {
+        id: "23",
+        title: "Cestování a hotel",
+        words: [
+          { cz: "Vlak", gr: "Τρένο", color: "var(--sky)", icon: "🚆" },
+          { cz: "Letiště", gr: "Αεροδρόμιο", color: "var(--sun)", icon: "✈️" },
+          { cz: "Lístek", gr: "Εισιτήριο", color: "var(--mint)", icon: "🎟️" },
+          { cz: "Kufr", gr: "Βαλίτσα", color: "var(--violet)", icon: "🧳" },
+          { cz: "Pokoj", gr: "Δωμάτιο", color: "var(--coral)", icon: "🚪" }
+        ],
+        flashcards: [
+          { front: "Vlak", back: "Τρένο", example: "Vlak přijíždí.", exampleGr: "Το τρένο έρχεται.", icon: "🚆" },
+          { front: "Letiště", back: "Αεροδρόμιο", example: "Letíme z letiště.", exampleGr: "Πετάμε από το αεροδρόμιο.", icon: "✈️" },
+          { front: "Kufr", back: "Βαλίτσα", example: "Balím kufr.", exampleGr: "Ετοιμάζω τη βαλίτσα.", icon: "🧳" },
+          { front: "Pokoj", back: "Δωμάτιο", example: "Hotelový pokoj.", exampleGr: "Δωμάτιο ξενοδοχείου.", icon: "🚪" }
+        ],
+        phrases: [
+          { cz: "Mám lístek.", gr: "Έχω εισιτήριο.", tone: 520 },
+          { cz: "Kde je pokoj?", gr: "Πού είναι το δωμάτιο;", tone: 540 }
+        ],
+        fill: [
+          {
+            prompt: "Balím svůj ____.",
+            promptGr: "Ετοιμάζω τη ____.",
+            options: [
+              { gr: "βαλίτσα", correct: true },
+              { gr: "τραπέζι" },
+              { gr: "φανάρι" }
+            ]
+          }
+        ],
+        storyActors: {
+          left: { name: "Luna", icon: "🧒" },
+          right: { name: "Máma", icon: "👩" }
+        },
+        story: [
+          { who: "Luna", line: "Mám lístek na vlak!", gr: "Έχω εισιτήριο για το τρένο!", icon: "🎟️", side: "left" },
+          { who: "Máma", line: "Nezapomeň kufr.", gr: "Μην ξεχάσεις τη βαλίτσα.", icon: "🧳", side: "right" },
+          { who: "Luna", line: "Kde je náš pokoj?", gr: "Πού είναι το δωμάτιό μας;", icon: "🚪", side: "left" }
+        ]
+      },
+      {
+        id: "24",
+        title: "Oslavy a narozeniny",
+        words: [
+          { cz: "Narozeniny", gr: "Γενέθλια", color: "var(--sun)", icon: "🎂" },
+          { cz: "Dort", gr: "Τούρτα", color: "var(--mint)", icon: "🍰" },
+          { cz: "Svíčka", gr: "Κερί", color: "var(--violet)", icon: "🕯️" },
+          { cz: "Dárek", gr: "Δώρο", color: "var(--coral)", icon: "🎁" },
+          { cz: "Balonek", gr: "Μπαλόνι", color: "var(--sky)", icon: "🎈" }
+        ],
+        flashcards: [
+          { front: "Narozeniny", back: "Γενέθλια", example: "Slavím narozeniny.", exampleGr: "Γιορτάζω γενέθλια.", icon: "🎂" },
+          { front: "Dort", back: "Τούρτα", example: "Dort je sladký.", exampleGr: "Η τούρτα είναι γλυκιά.", icon: "🍰" },
+          { front: "Dárek", back: "Δώρο", example: "Dostal jsem dárek.", exampleGr: "Πήρα ένα δώρο.", icon: "🎁" },
+          { front: "Balonek", back: "Μπαλόνι", example: "Balonek letí.", exampleGr: "Το μπαλόνι πετάει.", icon: "🎈" }
+        ],
+        phrases: [
+          { cz: "Všechno nejlepší!", gr: "Χρόνια πολλά!", tone: 520 },
+          { cz: "Sfoukni svíčku.", gr: "Φύσα το κερί.", tone: 540 }
+        ],
+        listen: [
+          {
+            prompt: "Δώρο",
+            options: [
+              { label: "Dárek", icon: "🎁", correct: true },
+              { label: "Dort", icon: "🍰" },
+              { label: "Balonek", icon: "🎈" }
+            ]
+          }
+        ],
+        tasks: [
+          { text: "Spočítej svíčky.", gr: "Μέτρα τα κεριά.", tone: 560 },
+          { text: "Otevři dárek.", gr: "Άνοιξε το δώρο.", tone: 540 }
+        ]
+      },
+      {
+        id: "25",
+        title: "Technologie a média",
+        words: [
+          { cz: "Telefon", gr: "Τηλέφωνο", color: "var(--sky)", icon: "📱" },
+          { cz: "Tablet", gr: "Τάμπλετ", color: "var(--mint)", icon: "💻" },
+          { cz: "Fotka", gr: "Φωτογραφία", color: "var(--sun)", icon: "📸" },
+          { cz: "Video", gr: "Βίντεο", color: "var(--violet)", icon: "🎬" },
+          { cz: "Robot", gr: "Ρομπότ", color: "var(--coral)", icon: "🤖" }
+        ],
+        flashcards: [
+          { front: "Telefon", back: "Τηλέφωνο", example: "Zavolám mámě.", exampleGr: "Παίρνω τη μαμά τηλέφωνο.", icon: "📱" },
+          { front: "Tablet", back: "Τάμπλετ", example: "Hraju na tabletu.", exampleGr: "Παίζω στο τάμπλετ.", icon: "💻" },
+          { front: "Fotka", back: "Φωτογραφία", example: "Fotím psa.", exampleGr: "Βγάζω φωτογραφία τον σκύλο.", icon: "📸" },
+          { front: "Robot", back: "Ρομπότ", example: "Robot mluví.", exampleGr: "Το ρομπότ μιλάει.", icon: "🤖" }
+        ],
+        commands: [
+          { label: "Klikni prstem!", desc: "Klikni prstem na obrazovku.", descGr: "Πάτησε με το δάχτυλο στην οθόνη.", tone: 520 }
+        ],
+        phrases: [
+          { cz: "Dělám fotku.", gr: "Βγάζω φωτογραφία.", tone: 520 },
+          { cz: "Robot se hýbe.", gr: "Το ρομπότ κινείται.", tone: 540 }
+        ],
+        sentences: [
+          {
+            prompt: "Zavolám tátovi.",
+            options: [
+              { gr: "Παίρνω τον μπαμπά τηλέφωνο.", correct: true },
+              { gr: "Παίζω με την μπάλα." },
+              { gr: "Τρέχω γρήγορα." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "26",
+        title: "Pomoc doma",
+        words: [
+          { cz: "Zametat", gr: "Σκουπίζω", color: "var(--sun)", icon: "🧹" },
+          { cz: "Nádobí", gr: "Πιάτα", color: "var(--sky)", icon: "🍽️" },
+          { cz: "Prádlo", gr: "Ρούχα", color: "var(--mint)", icon: "👕" },
+          { cz: "Odpadky", gr: "Σκουπίδια", color: "var(--violet)", icon: "🗑️" },
+          { cz: "Uklidit", gr: "Καθαρίζω", color: "var(--coral)", icon: "🧽" }
+        ],
+        flashcards: [
+          { front: "Zametat", back: "Σκουπίζω", example: "Zametám pokoj.", exampleGr: "Σκουπίζω το δωμάτιο.", icon: "🧹" },
+          { front: "Nádobí", back: "Πιάτα", example: "Myji nádobí.", exampleGr: "Πλένω τα πιάτα.", icon: "🍽️" },
+          { front: "Prádlo", back: "Ρούχα", example: "Skládám prádlo.", exampleGr: "Διπλώνω ρούχα.", icon: "👕" },
+          { front: "Odpadky", back: "Σκουπίδια", example: "Vynesu odpadky.", exampleGr: "Βγάζω τα σκουπίδια.", icon: "🗑️" }
+        ],
+        phrases: [
+          { cz: "Pomáhám doma.", gr: "Βοηθάω στο σπίτι.", tone: 520 },
+          { cz: "Uklidím stůl.", gr: "Καθαρίζω το τραπέζι.", tone: 540 }
+        ],
+        tasks: [
+          { text: "Vynes koš.", gr: "Βγάλε τον κάδο.", tone: 560 },
+          { text: "Utři stůl.", gr: "Σκούπισε το τραπέζι.", tone: 520 }
+        ],
+        soundHunt: [
+          {
+            prompt: "Πλένω τα πιάτα.",
+            options: [
+              { label: "Myji nádobí.", icon: "🍽️", correct: true },
+              { label: "Skládám prádlo.", icon: "👕" },
+              { label: "Vynáším odpadky.", icon: "🗑️" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "27",
+        title: "Vesmír a věda",
+        words: [
+          { cz: "Hvězda", gr: "Αστέρι", color: "var(--sun)", icon: "⭐" },
+          { cz: "Planeta", gr: "Πλανήτης", color: "var(--sky)", icon: "🪐" },
+          { cz: "Raketa", gr: "Πύραυλος", color: "var(--mint)", icon: "🚀" },
+          { cz: "Měsíc", gr: "Φεγγάρι", color: "var(--violet)", icon: "🌙" },
+          { cz: "Astronaut", gr: "Αστροναύτης", color: "var(--coral)", icon: "👩‍🚀" }
+        ],
+        flashcards: [
+          { front: "Hvězda", back: "Αστέρι", example: "Hvězdy svítí.", exampleGr: "Τα αστέρια λάμπουν.", icon: "⭐" },
+          { front: "Raketa", back: "Πύραυλος", example: "Raketa letí vysoko.", exampleGr: "Ο πύραυλος πετά ψηλά.", icon: "🚀" },
+          { front: "Planeta", back: "Πλανήτης", example: "Planeta je kulatá.", exampleGr: "Ο πλανήτης είναι στρογγυλός.", icon: "🪐" },
+          { front: "Astronaut", back: "Αστροναύτης", example: "Astronaut letí do vesmíru.", exampleGr: "Ο αστροναύτης πετά στο διάστημα.", icon: "👩‍🚀" }
+        ],
+        gestures: [
+          { label: "Odstartuj raketu!", desc: "Odstartuj: řekni 3-2-1 a vyskoč.", descGr: "Ξεκίνα: πες 3-2-1 και πήδα.", tone: 600 }
+        ],
+        phrases: [
+          { cz: "Vidím hvězdu.", gr: "Βλέπω ένα αστέρι.", tone: 520 },
+          { cz: "Raketa startuje.", gr: "Ο πύραυλος ξεκινά.", tone: 560 }
+        ],
+        sequence: [
+          { label: "3", detail: "τρία" },
+          { label: "2", detail: "δύο" },
+          { label: "1", detail: "ένα" },
+          { label: "Start!", detail: "εκκίνηση" }
+        ]
+      },
+      {
+        id: "28",
+        title: "Ekologie a planeta",
+        words: [
+          { cz: "Recyklovat", gr: "Ανακυκλώνω", color: "var(--sun)", icon: "♻️" },
+          { cz: "Strom", gr: "Δέντρο", color: "var(--mint)", icon: "🌳" },
+          { cz: "Voda", gr: "Νερό", color: "var(--sky)", icon: "💧" },
+          { cz: "Energie", gr: "Ενέργεια", color: "var(--violet)", icon: "⚡" },
+          { cz: "Sáček", gr: "Σακούλα", color: "var(--coral)", icon: "🛍️" }
+        ],
+        flashcards: [
+          { front: "Recyklovat", back: "Ανακυκλώνω", example: "Třídím papír.", exampleGr: "Ξεχωρίζω το χαρτί.", icon: "♻️" },
+          { front: "Strom", back: "Δέντρο", example: "Sázím strom.", exampleGr: "Φυτεύω δέντρο.", icon: "🌳" },
+          { front: "Voda", back: "Νερό", example: "Šetřím vodu.", exampleGr: "Προσέχω το νερό.", icon: "💧" },
+          { front: "Energie", back: "Ενέργεια", example: "Zhasni světlo.", exampleGr: "Σβήσε το φως.", icon: "⚡" }
+        ],
+        phrases: [
+          { cz: "Třiď odpad.", gr: "Ξεχώρισε τα σκουπίδια.", tone: 520 },
+          { cz: "Zhasni světlo.", gr: "Σβήσε το φως.", tone: 540 }
+        ],
+        fill: [
+          {
+            prompt: "Šetřím ____.",
+            promptGr: "Εξοικονομώ ____.",
+            options: [
+              { gr: "νερό", correct: true },
+              { gr: "βιβλίο" },
+              { gr: "πάρκο" }
+            ]
+          }
+        ],
+        tasks: [
+          { text: "Vhoď papír do modrého koše.", gr: "Βάλε το χαρτί στον μπλε κάδο.", tone: 560 }
+        ]
+      },
+      {
+        id: "29",
+        title: "Řecko a moře",
+        words: [
+          { cz: "Ostrov", gr: "Νησί", color: "var(--sun)", icon: "🏝️" },
+          { cz: "Athény", gr: "Αθήνα", color: "var(--sky)", icon: "🏛️" },
+          { cz: "Chrám", gr: "Ναός", color: "var(--mint)", icon: "⛪" },
+          { cz: "Loď", gr: "Πλοίο", color: "var(--violet)", icon: "⛵" },
+          { cz: "Řečtina", gr: "Ελληνικά", color: "var(--coral)", icon: "🔤" }
+        ],
+        flashcards: [
+          { front: "Ostrov", back: "Νησί", example: "Plujeme na ostrov.", exampleGr: "Ταξιδεύουμε σε νησί.", icon: "🏝️" },
+          { front: "Athény", back: "Αθήνα", example: "Athény jsou město.", exampleGr: "Η Αθήνα είναι πόλη.", icon: "🏛️" },
+          { front: "Loď", back: "Πλοίο", example: "Loď pluje.", exampleGr: "Το πλοίο πλέει.", icon: "⛵" },
+          { front: "Řečtina", back: "Ελληνικά", example: "Učím se řecky.", exampleGr: "Μαθαίνω ελληνικά.", icon: "🔤" }
+        ],
+        phrases: [
+          { cz: "Milujeme moře.", gr: "Αγαπάμε τη θάλασσα.", tone: 520 },
+          { cz: "Učíme se řecky.", gr: "Μαθαίνουμε ελληνικά.", tone: 540 }
+        ],
+        storyActors: {
+          left: { name: "Luna", icon: "🧒" },
+          right: { name: "Průvodce", icon: "🧭" }
+        },
+        story: [
+          { who: "Průvodce", line: "Vítej v Athénách!", gr: "Καλώς ήρθες στην Αθήνα!", icon: "🏛️", side: "right" },
+          { who: "Luna", line: "Chci vidět chrám.", gr: "Θέλω να δω τον ναό.", icon: "🧒", side: "left" },
+          { who: "Průvodce", line: "Potom pojedeme lodí na ostrov.", gr: "Μετά θα πάμε με πλοίο σε νησί.", icon: "⛵", side: "right" }
+        ]
+      },
+      {
+        id: "30",
+        title: "Opakování a dialogy",
+        words: [
+          { cz: "Ano", gr: "Ναι", color: "var(--sun)", icon: "👍" },
+          { cz: "Ne", gr: "Όχι", color: "var(--mint)", icon: "👎" },
+          { cz: "Prosím", gr: "Παρακαλώ", color: "var(--violet)", icon: "😊" },
+          { cz: "Děkuji", gr: "Ευχαριστώ", color: "var(--coral)", icon: "🙏" },
+          { cz: "Kde?", gr: "Πού;", color: "var(--sky)", icon: "❓" }
+        ],
+        flashcards: [
+          { front: "Ano", back: "Ναι", example: "Ano, chci.", exampleGr: "Ναι, θέλω.", icon: "👍" },
+          { front: "Ne", back: "Όχι", example: "Ne, děkuji.", exampleGr: "Όχι, ευχαριστώ.", icon: "👎" },
+          { front: "Prosím", back: "Παρακαλώ", example: "Prosím o pomoc.", exampleGr: "Παρακαλώ για βοήθεια.", icon: "😊" },
+          { front: "Děkuji", back: "Ευχαριστώ", example: "Děkuji ti.", exampleGr: "Σε ευχαριστώ.", icon: "🙏" }
+        ],
+        gestures: [
+          { label: "Zvedni palec.", desc: "Zvedni palec nahoru.", descGr: "Σήκωσε τον αντίχειρα ψηλά.", tone: 520 }
+        ],
+        phrases: [
+          { cz: "Ano, rozumím.", gr: "Ναι, καταλαβαίνω.", tone: 520 },
+          { cz: "Kde je škola?", gr: "Πού είναι το σχολείο;", tone: 540 }
+        ],
+        listen: [
+          {
+            prompt: "Παρακαλώ",
+            options: [
+              { label: "Prosím", icon: "😊", correct: true },
+              { label: "Ano", icon: "👍" },
+              { label: "Ne", icon: "👎" }
+            ]
+          }
+        ],
+        sentences: [
+          {
+            prompt: "Řekni děkuji.",
+            options: [
+              { gr: "Πες ευχαριστώ.", correct: true },
+              { gr: "Πες γεια." },
+              { gr: "Πες ναι." }
+            ]
+          }
+        ],
+        tasks: [
+          { text: "Zeptej se: kde je park?", gr: "Ρώτησε: πού είναι το πάρκο;", tone: 560 }
         ]
       }
-    };
+    ];
+
+    const lessons = lessonList.reduce((acc, lesson) => {
+      const normalized = {
+        ...lesson,
+        commands: lesson.commands || lesson.gestures || []
+      };
+      acc[lesson.id] = normalized;
+      return acc;
+    }, {});
+
+    function toSlug(label = "", idx = 0) {
+      const base = label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      return base || `id-${idx}`;
+    }
+
+    function toPexesoCards(words = [], maxPairs = 6) {
+      return (words || [])
+        .slice(0, maxPairs)
+        .flatMap((w, idx) => {
+          const id = toSlug(w.cz || w.gr || "", idx);
+          return [
+            { id, label: w.cz || `CZ ${idx + 1}`, lang: "CZ" },
+            { id, label: w.gr || `GR ${idx + 1}`, lang: "GR" }
+          ];
+        });
+    }
 
     function setSectionVisibility(id, visible) {
       const section = document.getElementById(id);
@@ -1386,17 +2257,24 @@
           const flipped = inner.dataset.flipped === "true";
           inner.dataset.flipped = (!flipped).toString();
           playTone(flipped ? 540 : 720, 0.16);
-          if (!flipped) speakGreek(card.back);
+          if (!flipped) {
+            const speakFirst = card.back || "";
+            const speakSecond = card.exampleGr || card.example || "";
+            speakGreek(speakFirst);
+            if (speakSecond && speakSecond !== speakFirst) {
+              setTimeout(() => speakGreek(speakSecond), 900);
+            }
+          }
         });
         wrap.appendChild(inner);
         grid.appendChild(wrap);
       });
     }
 
-    function renderGestures(list = []) {
-      const listElem = document.getElementById("gestureList");
+    function renderCommands(list = []) {
+      const listElem = document.getElementById("commandList");
       listElem.innerHTML = "";
-      setSectionVisibility("gesta", list.length > 0);
+      setSectionVisibility("imperativy", list.length > 0);
       list.forEach((g) => {
         const row = document.createElement("div");
         row.className = "gesture-row";
@@ -1447,10 +2325,14 @@
       list.forEach((item) => {
         const card = document.createElement("div");
         card.className = "listen-card";
+        const options = [...item.options].sort(() => Math.random() - 0.5);
         card.innerHTML = `
-          <div class="tag">Poslechni: ${item.prompt}</div>
+          <div class="tag" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span>Poslechni:</span>
+            <button class="pill listen-play">▶️ ${item.prompt}</button>
+          </div>
           <div class="listen-options">
-            ${item.options.map((opt, idx) => `
+            ${options.map((opt, idx) => `
               <button class="listen-btn" data-correct="${opt.correct || false}" data-opt="${idx}">
                 <span>${opt.icon || "★"} ${opt.label || ""}</span>
                 <span>→</span>
@@ -1458,12 +2340,19 @@
             `).join("")}
           </div>
         `;
+        const play = card.querySelector(".listen-play");
+        if (play) {
+          play.addEventListener("click", () => {
+            speakGreek(item.prompt || "");
+            playTone(600, 0.12);
+          });
+        }
         card.querySelectorAll(".listen-btn").forEach((btn) => {
           btn.addEventListener("click", () => {
             const correct = btn.dataset.correct === "true";
             if (correct) btn.classList.add("good");
             playTone(correct ? 680 : 420, 0.16);
-            if (item.prompt) speakGreek(item.prompt);
+            if (correct && item.prompt) speakGreek(item.prompt);
           });
         });
         grid.appendChild(card);
@@ -1555,7 +2444,7 @@
         card.className = "sound-card";
         card.innerHTML = `
           <div class="tag">Poslechni</div>
-          <button class="pill" data-play="true">▶️ ${item.prompt}</button>
+          <button class="pill" data-play="true">▶️ Pusť zvuk</button>
           <div class="sound-options">
             ${item.options.map((opt, idx) => `
               <button class="sound-btn" data-correct="${opt.correct || false}" data-opt="${idx}">
@@ -1565,7 +2454,10 @@
             `).join("")}
           </div>
         `;
-        card.querySelector('[data-play="true"]').addEventListener("click", () => speakGreek(item.prompt));
+        card.querySelector('[data-play="true"]').addEventListener("click", () => {
+          speakGreek(item.prompt);
+          playTone(640, 0.12);
+        });
         card.querySelectorAll(".sound-btn").forEach((btn) => {
           btn.addEventListener("click", () => {
             const correct = btn.dataset.correct === "true";
@@ -1582,28 +2474,54 @@
       const grid = document.getElementById("sequenceGrid");
       grid.innerHTML = "";
       setSectionVisibility("serad", list.length > 0);
-      const steps = [...list];
+      const original = [...list];
+      function shuffled(arr = []) {
+        const copy = [...arr].sort(() => Math.random() - 0.5);
+        if (copy.length > 1 && copy.every((s, i) => (s.label || "") === (arr[i].label || ""))) {
+          [copy[0], copy[1]] = [copy[1], copy[0]];
+        }
+        return copy;
+      }
+      const steps = shuffled(list);
 
-      function refresh() {
-        grid.innerHTML = "";
-        steps.forEach((step, idx) => {
-          const card = document.createElement("div");
-          card.className = "sequence-card";
-          card.innerHTML = `
-            <div class="tag">Krok ${idx + 1}</div>
-            <div class="sequence-steps">
-              ${steps.map((s, i) => `
-                <div class="sequence-step">
-                  <span>${i + 1}. ${s.label}</span>
-                  <div class="seq-buttons">
-                    <button class="seq-btn" data-dir="-1" data-idx="${i}">↑</button>
-                    <button class="seq-btn" data-dir="1" data-idx="${i}">↓</button>
-                  </div>
+      function renderCard() {
+        const card = document.createElement("div");
+        card.className = "sequence-card";
+        card.innerHTML = `
+          <div class="tag seq-status">Seřaď kroky</div>
+          <div class="sequence-steps"></div>
+        `;
+        const listEl = card.querySelector(".sequence-steps");
+        const status = card.querySelector(".seq-status");
+
+        function repaint() {
+          const isCorrect = steps.length === original.length &&
+            steps.every((s, i) => (s.label || "") === (original[i].label || ""));
+          card.dataset.correct = isCorrect.toString();
+          if (status) status.textContent = isCorrect ? "Seřazeno správně!" : "Seřaď kroky";
+
+          listEl.innerHTML = steps
+            .map((s, i) => `
+              <div class="sequence-step">
+                <button class="pill sequence-step-text" data-speak="${(s.detail || s.gr || s.label || "").replace(/\"/g, "&quot;")}">
+                  ${i + 1}. ${s.detail || s.gr || s.label}
+                </button>
+                <div class="seq-buttons">
+                  <button class="seq-btn" data-dir="-1" data-idx="${i}">↑</button>
+                  <button class="seq-btn" data-dir="1" data-idx="${i}">↓</button>
                 </div>
-              `).join("")}
-            </div>
-          `;
-          card.querySelectorAll(".seq-btn").forEach((btn) => {
+              </div>
+            `)
+            .join("");
+
+          listEl.querySelectorAll(".sequence-step-text").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const text = btn.dataset.speak || btn.textContent || "";
+              speakGreek(text);
+              playTone(600, 0.12);
+            });
+          });
+          listEl.querySelectorAll(".seq-btn").forEach((btn) => {
             btn.addEventListener("click", () => {
               const dir = Number(btn.dataset.dir);
               const pos = Number(btn.dataset.idx);
@@ -1611,14 +2529,18 @@
               if (target < 0 || target >= steps.length) return;
               [steps[pos], steps[target]] = [steps[target], steps[pos]];
               playTone(520, 0.1);
-              refresh();
+              repaint();
             });
           });
-          grid.appendChild(card);
-        });
+        }
+
+        repaint();
+        return card;
       }
 
-      if (steps.length) refresh();
+      if (steps.length) {
+        grid.appendChild(renderCard());
+      }
     }
 
     function renderFill(list = []) {
@@ -1630,7 +2552,10 @@
         card.className = "fill-card";
         card.innerHTML = `
           <div class="tag">Věta ${idx + 1}</div>
-          <strong>${item.prompt}</strong>
+          <div style="display:grid;gap:4px;">
+            <strong>${item.prompt}</strong>
+            <small style="font-weight:700;color:#2b2753;">${item.promptGr || item.prompt || ""}</small>
+          </div>
           <div class="fill-options">
             ${item.options.map((opt, i) => `
               <button class="fill-btn" data-correct="${opt.correct || false}" data-opt="${i}">
@@ -1780,6 +2705,24 @@
       });
     }
 
+    function getPexesoCards(lesson) {
+      if (!lesson) return [];
+      if (lesson.pexeso && lesson.pexeso.length) return lesson.pexeso;
+      return toPexesoCards(lesson.words || [], lesson.pexesoPairs || 6);
+    }
+
+    function populateLessonSelect() {
+      const lessonSelect = document.getElementById("lessonSelect");
+      if (!lessonSelect) return;
+      lessonSelect.innerHTML = "";
+      lessonList.forEach((lesson) => {
+        const opt = document.createElement("option");
+        opt.value = lesson.id;
+        opt.textContent = `Lekce ${lesson.id} — ${lesson.title}`;
+        lessonSelect.appendChild(opt);
+      });
+    }
+
     function setLesson(lessonId = "1") {
       const lesson = lessons[lessonId] || lessons["1"];
       state.currentLesson = lessonId;
@@ -1791,13 +2734,15 @@
       const brandTitle = document.getElementById("brandTitle");
       const brandBadge = document.getElementById("brandBadge");
       const lessonLabel = document.querySelector(".lesson-label");
-      if (brandTitle) brandTitle.textContent = lesson.title;
-      if (brandBadge) brandBadge.textContent = `R${lessonId}`;
+      const fullTitle = `Lekce ${lessonId} — ${lesson.title}`;
+      if (brandTitle) brandTitle.textContent = fullTitle;
+      if (brandBadge) brandBadge.textContent = `A${lessonId}`;
       if (lessonLabel) lessonLabel.textContent = `Lekce ${lessonId}`;
+      document.title = `Rectina Pro Děti — Lekce ${lessonId}`;
 
       renderWords(lesson.words || []);
       renderFlashcards(lesson.flashcards || []);
-      renderGestures(lesson.gestures || []);
+      renderCommands(lesson.commands || lesson.gestures || []);
       renderPhrases(lesson.phrases || []);
       renderListen(lesson.listen || []);
       renderSentences(lesson.sentences || []);
@@ -1806,7 +2751,7 @@
       renderSequence(lesson.sequence || []);
       renderFill(lesson.fill || []);
       renderSoundHunt(lesson.soundHunt || []);
-      renderPexeso(lesson.pexeso || []);
+      renderPexeso(getPexesoCards(lesson));
       renderStory(lesson.story || [], lesson.storyActors || {});
       updatePexesoStatus();
       playTone(540, 0.12);
@@ -1818,7 +2763,7 @@
       const lessonSelect = document.getElementById("lessonSelect");
 
       resetPexeso.addEventListener("click", () => {
-        renderPexeso(state.currentLessonData?.pexeso || []);
+        renderPexeso(getPexesoCards(state.currentLessonData));
         playTone(600, 0.2);
       });
 
@@ -1836,6 +2781,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      populateLessonSelect();
       setLesson("1");
       bindControls();
     });
