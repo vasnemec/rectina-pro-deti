@@ -2912,6 +2912,7 @@
       if (scroll && wasHome) {
         const top = document.getElementById("lessonView");
         if (top) top.scrollIntoView({ behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
 
