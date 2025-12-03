@@ -344,8 +344,16 @@
 
     .memory-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .memory-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .memory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     .memory-card {
@@ -365,8 +373,125 @@
     .memory-card[data-state="open"] { background: #fffef5; border-color: rgba(255, 212, 71, 0.8); }
     .memory-card[data-state="matched"] { background: rgba(111, 224, 194, 0.25); color: #0f4b3e; }
 
-    .lesson-block { display: none; }
-    .lesson-block[data-active="true"] { display: block; }
+    .story-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .story-card {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: linear-gradient(140deg, rgba(255, 212, 71, 0.22), rgba(255, 255, 255, 0.95));
+      border: 1px solid rgba(99, 91, 255, 0.12);
+      box-shadow: var(--shadow);
+      align-items: center;
+    }
+
+    .story-line {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .story-meta {
+      display: flex;
+      gap: 8px;
+      font-weight: 600;
+      color: #4d4a5f;
+      font-size: 0.95rem;
+    }
+
+    .story-slot {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .story-slot.right {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      position: relative;
+      background: #fff;
+      border: 1px solid rgba(99, 91, 255, 0.16);
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      max-width: 70%;
+    }
+
+    .bubble-left::after,
+    .bubble-right::after {
+      content: "";
+      position: absolute;
+      top: 16px;
+      border: 8px solid transparent;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.08));
+    }
+
+    .bubble-left::after {
+      left: -8px;
+      border-right-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .bubble-right::after {
+      right: -8px;
+      border-left-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .story-gr {
+      display: none;
+      color: #2b2753;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .bubble.show-gr .story-gr {
+      display: block;
+    }
+
+    .story-action {
+      font-weight: 700;
+      color: #5b567a;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 10px;
+      background: rgba(99, 91, 255, 0.08);
+      min-width: 90px;
+    }
+
+    .story-actors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .actor-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      font-weight: 800;
+    }
+
+    .actor-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 212, 71, 0.35);
+      font-size: 1.4rem;
+    }
 
     footer { margin-top: 30px; text-align: center; color: #4a4761; font-weight: 600; }
 
@@ -379,27 +504,30 @@
   <div class="page">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-badge">R1</div>
-        Lekce 1 — Barvy, pozdravy, pexeso
+        <div class="brand-badge" id="brandBadge">R1</div>
+        <span id="brandTitle">Lekce 1 — Barvy, pozdravy, pexeso</span>
       </div>
       <nav aria-label="Hlavní navigace">
         <span class="nav-label">Lekce</span>
         <select class="lesson-select" id="lessonSelect" aria-label="Výběr lekce">
           <option value="1" selected>Lekce 1</option>
           <option value="2">Lekce 2</option>
+          <option value="3">Lekce 3</option>
+          <option value="4">Lekce 4</option>
+          <option value="5">Lekce 5</option>
+          <option value="6">Lekce 6</option>
         </select>
       </nav>
     </header>
 
     <main id="zacatek">
-      <div class="lesson-block" data-lesson="1" data-active="true">
       <section class="section" id="slova">
         <div class="section-header">
           <div class="section-title">
             <span class="tag">Známe slova</span>
             Začneme s barvami a pozdravy
           </div>
-          <span class="tag" style="background: rgba(255, 212, 71, 0.25);">Lekce 1</span>
+          <span class="tag lesson-label" style="background: rgba(255, 212, 71, 0.25);">Lekce 1</span>
         </div>
         <div class="tile-grid word-grid" id="wordGrid"></div>
       </section>
@@ -448,19 +576,17 @@
         </div>
         <div class="memory-grid" id="memoryGrid" aria-live="polite"></div>
       </section>
-      </div>
 
-      <div class="lesson-block" data-lesson="2">
-        <section class="section">
-          <div class="section-header">
-            <div class="section-title">
-              <span class="tag" style="background: rgba(123, 180, 255, 0.22);">Lekce 2</span>
-              Připravujeme nová slovíčka a čísla
-            </div>
+      <section class="section" id="pribeh">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="tag" style="background: rgba(255, 212, 71, 0.25);">Příběh</span>
+            Krátký příběh s dialogem
           </div>
-          <p>Další lekce přidá čísla 1–10, barvy moře a nové pexeso s obrázky. Vyberte lekci 1 pro aktuální obsah.</p>
-        </section>
-      </div>
+        </div>
+        <div class="story-actors" id="storyActorBar"></div>
+        <div class="story-wrap" id="storyWrap"></div>
+      </section>
     </main>
 
     <footer></footer>
@@ -470,7 +596,8 @@
     const state = {
       muted: false,
       pexesoOpen: [],
-      pexesoMatched: new Set()
+      pexesoMatched: new Set(),
+      currentLesson: "1"
     };
 
     let audioCtx;
@@ -514,57 +641,269 @@
       speakTimeout = setTimeout(() => window.speechSynthesis.speak(utter), 80);
     }
 
-    const words = [
-      { cz: "Slunce", gr: "Ήλιος", color: "var(--sun)", icon: "☀️" },
-      { cz: "Moře", gr: "Θάλασσα", color: "var(--sky)", icon: "🌊" },
-      { cz: "Ahoj", gr: "Γεια σου", color: "var(--mint)", icon: "👋" },
-      { cz: "Prosím", gr: "Παρακαλώ", color: "var(--coral)", icon: "😊" },
-      { cz: "Děkuji", gr: "Ευχαριστώ", color: "var(--violet)", icon: "🙏" },
-      { cz: "Ruka", gr: "Χέρι", color: "var(--sky)", icon: "✋" }
-    ];
+    const lessons = {
+      "1": {
+        title: "Lekce 1 — Barvy, pozdravy, pexeso",
+        words: [
+          { cz: "Slunce", gr: "Ήλιος", color: "var(--sun)", icon: "☀️" },
+          { cz: "Moře", gr: "Θάλασσα", color: "var(--sky)", icon: "🌊" },
+          { cz: "Ahoj", gr: "Γεια σου", color: "var(--mint)", icon: "👋" },
+          { cz: "Prosím", gr: "Παρακαλώ", color: "var(--coral)", icon: "😊" },
+          { cz: "Děkuji", gr: "Ευχαριστώ", color: "var(--violet)", icon: "🙏" },
+          { cz: "Ruka", gr: "Χέρι", color: "var(--sky)", icon: "✋" }
+        ],
+        flashcards: [
+          { front: "Žlutá", back: "Κίτρινο", example: "Slunce je žluté.", exampleGr: "Ο ήλιος είναι κίτρινος.", icon: "☀️" },
+          { front: "Modrá", back: "Μπλε", example: "Moře je modré.", exampleGr: "Η θάλασσα είναι μπλε.", icon: "🌊" },
+          { front: "Zelená", back: "Πράσινο", example: "List je zelený.", exampleGr: "Το φύλλο είναι πράσινο.", icon: "🌿" },
+          { front: "Ahoj!", back: "Γεια!", example: "Řekni: \"Ahoj, kamaráde!\"", exampleGr: "Πες: \"Γεια, φίλε!\"", icon: "👋" },
+          { front: "Děkuji", back: "Ευχαριστώ", example: "Řekni: \"Děkuji!\"", exampleGr: "Πες: \"Ευχαριστώ!\"", icon: "🙏" },
+          { front: "Prosím", back: "Παρακαλώ", example: "Řekni: \"Prosím, můžeš?\"", exampleGr: "Πες: \"Παρακαλώ, μπορείς;\"", icon: "😊" }
+        ],
+        gestures: [
+          { label: "Vstaň!", desc: "Postav se hned.", descGr: "Σήκω τώρα.", tone: 660 },
+          { label: "Sedni!", desc: "Posaď se dolů.", descGr: "Κάτσε κάτω.", tone: 520 },
+          { label: "Otoč se!", desc: "Udělaj malou otočku.", descGr: "Κάνε μια μικρή στροφή.", tone: 740 },
+          { label: "Řekni ahoj!", desc: "Řekni nahlas \"Ahoj\".", descGr: "Πες δυνατά «Γεια».", tone: 600 }
+        ],
+        phrases: [
+          { cz: "Ahoj, já jsem Luna.", gr: "Γεια, είμαι η Λούνα.", tone: 430 },
+          { cz: "Podívej, modrá vlna!", gr: "Κοίτα, μπλε κύμα!", tone: 710 },
+          { cz: "Děkuji za hru.", gr: "Ευχαριστώ για το παιχνίδι.", tone: 520 },
+          { cz: "Chci hrát pexeso.", gr: "Θέλω να παίξω μνήμη.", tone: 640 }
+        ],
+        pexeso: [
+          { id: "sun", label: "Slunce", lang: "CZ" },
+          { id: "sun", label: "Ήλιος", lang: "GR" },
+          { id: "sea", label: "Moře", lang: "CZ" },
+          { id: "sea", label: "Θάλασσα", lang: "GR" },
+          { id: "hi", label: "Ahoj", lang: "CZ" },
+          { id: "hi", label: "Γεια", lang: "GR" },
+          { id: "blue", label: "Modrá", lang: "CZ" },
+          { id: "blue", label: "Μπλε", lang: "GR" },
+          { id: "yellow", label: "Žlutá", lang: "CZ" },
+          { id: "yellow", label: "Κίτρινο", lang: "GR" },
+          { id: "thanks", label: "Děkuji", lang: "CZ" },
+          { id: "thanks", label: "Ευχαριστώ", lang: "GR" }
+        ]
+      },
+      "2": {
+        title: "Lekce 2 — Čísla a dům",
+        words: [
+          { cz: "Jedna", gr: "Ένα", color: "var(--sun)", icon: "1️⃣" },
+          { cz: "Dva", gr: "Δύο", color: "var(--sky)", icon: "2️⃣" },
+          { cz: "Tři", gr: "Τρία", color: "var(--mint)", icon: "3️⃣" },
+          { cz: "Dům", gr: "Σπίτι", color: "var(--coral)", icon: "🏠" },
+          { cz: "Stůl", gr: "Τραπέζι", color: "var(--violet)", icon: "🪑" },
+          { cz: "Postel", gr: "Κρεβάτι", color: "var(--sky)", icon: "🛏️" }
+        ],
+        flashcards: [
+          { front: "Jedna", back: "Ένα", example: "Mám jednu knihu.", exampleGr: "Έχω ένα βιβλίο.", icon: "1️⃣" },
+          { front: "Dva", back: "Δύο", example: "Vidím dva stoly.", exampleGr: "Βλέπω δύο τραπέζια.", icon: "2️⃣" },
+          { front: "Tři", back: "Τρία", example: "Tři děti si hrají.", exampleGr: "Τρία παιδιά παίζουν.", icon: "3️⃣" },
+          { front: "Dům", back: "Σπίτι", example: "Dům je velký.", exampleGr: "Το σπίτι είναι μεγάλο.", icon: "🏠" },
+          { front: "Stůl", back: "Τραπέζι", example: "Stůl je dřevěný.", exampleGr: "Το τραπέζι είναι ξύλινο.", icon: "🪑" },
+          { front: "Postel", back: "Κρεβάτι", example: "Postel je měkká.", exampleGr: "Το κρεβάτι είναι μαλακό.", icon: "🛏️" }
+        ],
+        gestures: [
+          { label: "Spočítej do tří!", desc: "Řekni jedna, dva, tři.", descGr: "Πες ένα, δύο, τρία.", tone: 600 },
+          { label: "Zaklepej!", desc: "Zaklepej na stůl.", descGr: "Χτύπα απαλά το τραπέζι.", tone: 500 }
+        ],
+        phrases: [
+          { cz: "Jedna židle.", gr: "Μία καρέκλα.", tone: 480 },
+          { cz: "Dvě okna.", gr: "Δύο παράθυρα.", tone: 520 },
+          { cz: "Dům je tady.", gr: "Το σπίτι είναι εδώ.", tone: 560 }
+        ],
+        pexeso: [
+          { id: "one", label: "Jedna", lang: "CZ" },
+          { id: "one", label: "Ένα", lang: "GR" },
+          { id: "two", label: "Dva", lang: "CZ" },
+          { id: "two", label: "Δύο", lang: "GR" },
+          { id: "three", label: "Tři", lang: "CZ" },
+          { id: "three", label: "Τρία", lang: "GR" },
+          { id: "house", label: "Dům", lang: "CZ" },
+          { id: "house", label: "Σπίτι", lang: "GR" },
+          { id: "table", label: "Stůl", lang: "CZ" },
+          { id: "table", label: "Τραπέζι", lang: "GR" },
+          { id: "bed", label: "Postel", lang: "CZ" },
+          { id: "bed", label: "Κρεβάτι", lang: "GR" }
+        ]
+      },
+      "3": {
+        title: "Lekce 3 — Jídlo a pití",
+        words: [
+          { cz: "Chléb", gr: "Ψωμί", color: "var(--sun)", icon: "🍞" },
+          { cz: "Voda", gr: "Νερό", color: "var(--sky)", icon: "💧" },
+          { cz: "Jablko", gr: "Μήλο", color: "var(--mint)", icon: "🍎" },
+          { cz: "Mléko", gr: "Γάλα", color: "var(--violet)", icon: "🥛" },
+          { cz: "Sýr", gr: "Τυρί", color: "var(--coral)", icon: "🧀" },
+          { cz: "Med", gr: "Μέλι", color: "var(--sun)", icon: "🍯" }
+        ],
+        flashcards: [
+          { front: "Chléb", back: "Ψωμί", example: "Chléb je čerstvý.", exampleGr: "Το ψωμί είναι φρέσκο.", icon: "🍞" },
+          { front: "Voda", back: "Νερό", example: "Voda je studená.", exampleGr: "Το νερό είναι κρύο.", icon: "💧" },
+          { front: "Jablko", back: "Μήλο", example: "Jablko je červené.", exampleGr: "Το μήλο είναι κόκκινο.", icon: "🍎" },
+          { front: "Mléko", back: "Γάλα", example: "Mléko je bílé.", exampleGr: "Το γάλα είναι άσπρο.", icon: "🥛" },
+          { front: "Sýr", back: "Τυρί", example: "Sýr je chutný.", exampleGr: "Το τυρί είναι νόστιμο.", icon: "🧀" },
+          { front: "Med", back: "Μέλι", example: "Med je sladký.", exampleGr: "Το μέλι είναι γλυκό.", icon: "🍯" }
+        ],
+        gestures: [
+          { label: "Napij se!", desc: "Udělaj gesto pití.", descGr: "Κάνε κίνηση ότι πίνεις.", tone: 600 },
+          { label: "Zahraj si jablko!", desc: "Přilož ruce jako kousnutí.", descGr: "Κάνε πως δαγκώνεις μήλο.", tone: 520 }
+        ],
+        phrases: [
+          { cz: "Mám hlad.", gr: "Πεινάω.", tone: 520 },
+          { cz: "Mám žízeň.", gr: "Διψάω.", tone: 540 },
+          { cz: "Chci jablko.", gr: "Θέλω ένα μήλο.", tone: 560 }
+        ],
+        pexeso: [
+          { id: "bread", label: "Chléb", lang: "CZ" },
+          { id: "bread", label: "Ψωμί", lang: "GR" },
+          { id: "water", label: "Voda", lang: "CZ" },
+          { id: "water", label: "Νερό", lang: "GR" },
+          { id: "apple", label: "Jablko", lang: "CZ" },
+          { id: "apple", label: "Μήλο", lang: "GR" },
+          { id: "milk", label: "Mléko", lang: "CZ" },
+          { id: "milk", label: "Γάλα", lang: "GR" },
+          { id: "cheese", label: "Sýr", lang: "CZ" },
+          { id: "cheese", label: "Τυρί", lang: "GR" },
+          { id: "honey", label: "Med", lang: "CZ" },
+          { id: "honey", label: "Μέλι", lang: "GR" }
+        ]
+      },
+      "4": {
+        title: "Lekce 4 — Rodina",
+        words: [
+          { cz: "Máma", gr: "Μαμά", color: "var(--coral)", icon: "👩" },
+          { cz: "Táta", gr: "Μπαμπάς", color: "var(--sky)", icon: "👨" },
+          { cz: "Bratr", gr: "Αδελφός", color: "var(--mint)", icon: "🧒" },
+          { cz: "Sestra", gr: "Αδελφή", color: "var(--violet)", icon: "👧" },
+          { cz: "Babi", gr: "Γιαγιά", color: "var(--sun)", icon: "👵" },
+          { cz: "Děda", gr: "Παππούς", color: "var(--sun)", icon: "👴" }
+        ],
+        flashcards: [
+          { front: "Máma", back: "Μαμά", example: "Máma čte knihu.", exampleGr: "Η μαμά διαβάζει βιβλίο.", icon: "👩" },
+          { front: "Táta", back: "Μπαμπάς", example: "Táta vaří.", exampleGr: "Ο μπαμπάς μαγειρεύει.", icon: "👨" },
+          { front: "Bratr", back: "Αδελφός", example: "Bratr si hraje.", exampleGr: "Ο αδελφός παίζει.", icon: "🧒" },
+          { front: "Sestra", back: "Αδελφή", example: "Sestra zpívá.", exampleGr: "Η αδελφή τραγουδά.", icon: "👧" },
+          { front: "Babi", back: "Γιαγιά", example: "Babi peče koláč.", exampleGr: "Η γιαγιά ψήνει πίτα.", icon: "👵" },
+          { front: "Děda", back: "Παππούς", example: "Děda čte noviny.", exampleGr: "Ο παππούς διαβάζει εφημερίδα.", icon: "👴" }
+        ],
+        gestures: [
+          { label: "Objem babi!", desc: "Natáhni ruce pro obejmutí.", descGr: "Άπλωσε τα χέρια για αγκαλιά.", tone: 640 },
+          { label: "Zavolej tátu!", desc: "Řekni „táto“.", descGr: "Πες «μπαμπά».", tone: 580 }
+        ],
+        phrases: [
+          { cz: "Miluji svou rodinu.", gr: "Αγαπώ την οικογένειά μου.", tone: 600 },
+          { cz: "Máma je tady.", gr: "Η μαμά είναι εδώ.", tone: 540 },
+          { cz: "Táta se usmívá.", gr: "Ο μπαμπάς χαμογελά.", tone: 520 }
+        ],
+        pexeso: [
+          { id: "mom", label: "Máma", lang: "CZ" },
+          { id: "mom", label: "Μαμά", lang: "GR" },
+          { id: "dad", label: "Táta", lang: "CZ" },
+          { id: "dad", label: "Μπαμπάς", lang: "GR" },
+          { id: "bro", label: "Bratr", lang: "CZ" },
+          { id: "bro", label: "Αδελφός", lang: "GR" },
+          { id: "sis", label: "Sestra", lang: "CZ" },
+          { id: "sis", label: "Αδελφή", lang: "GR" },
+          { id: "granma", label: "Babi", lang: "CZ" },
+          { id: "granma", label: "Γιαγιά", lang: "GR" },
+          { id: "granpa", label: "Děda", lang: "CZ" },
+          { id: "granpa", label: "Παππούς", lang: "GR" }
+        ]
+      },
+      "5": {
+        title: "Lekce 5 — Škola a hřiště",
+        words: [
+          { cz: "Škola", gr: "Σχολείο", color: "var(--violet)", icon: "🏫" },
+          { cz: "Kniha", gr: "Βιβλίο", color: "var(--sun)", icon: "📕" },
+          { cz: "Tužka", gr: "Μολύβι", color: "var(--sky)", icon: "✏️" },
+          { cz: "Míč", gr: "Μπάλα", color: "var(--mint)", icon: "⚽" },
+          { cz: "Hřiště", gr: "Παιδική χαρά", color: "var(--coral)", icon: "🛝" },
+          { cz: "Kreslit", gr: "Ζωγραφίζω", color: "var(--sun)", icon: "🎨" }
+        ],
+        flashcards: [
+          { front: "Škola", back: "Σχολείο", example: "Škola je blízko.", exampleGr: "Το σχολείο είναι κοντά.", icon: "🏫" },
+          { front: "Kniha", back: "Βιβλίο", example: "Čtu knihu.", exampleGr: "Διαβάζω ένα βιβλίο.", icon: "📕" },
+          { front: "Tužka", back: "Μολύβι", example: "Tužka kreslí.", exampleGr: "Το μολύβι σχεδιάζει.", icon: "✏️" },
+          { front: "Míč", back: "Μπάλα", example: "Míč letí.", exampleGr: "Η μπάλα πετάει.", icon: "⚽" },
+          { front: "Hřiště", back: "Παιδική χαρά", example: "Hřiště je veselé.", exampleGr: "Η παιδική χαρά είναι χαρούμενη.", icon: "🛝" },
+          { front: "Kreslit", back: "Ζωγραφίζω", example: "Kreslím dům.", exampleGr: "Ζωγραφίζω ένα σπίτι.", icon: "🎨" }
+        ],
+        gestures: [
+          { label: "Nakresli kruh!", desc: "Nakresli prstem do vzduchu.", descGr: "Ζωγράφισε έναν κύκλο στον αέρα.", tone: 650 },
+          { label: "Kopni míč!", desc: "Ukaž kopnutí nohou.", descGr: "Δείξε πως κλωτσάς μπάλα.", tone: 540 }
+        ],
+        phrases: [
+          { cz: "Jdu do školy.", gr: "Πάω στο σχολείο.", tone: 520 },
+          { cz: "Mám knihu.", gr: "Έχω ένα βιβλίο.", tone: 540 },
+          { cz: "Hraju si s míčem.", gr: "Παίζω με την μπάλα.", tone: 560 }
+        ],
+        pexeso: [
+          { id: "school", label: "Škola", lang: "CZ" },
+          { id: "school", label: "Σχολείο", lang: "GR" },
+          { id: "book", label: "Kniha", lang: "CZ" },
+          { id: "book", label: "Βιβλίο", lang: "GR" },
+          { id: "pencil", label: "Tužka", lang: "CZ" },
+          { id: "pencil", label: "Μολύβι", lang: "GR" },
+          { id: "ball", label: "Míč", lang: "CZ" },
+          { id: "ball", label: "Μπάλα", lang: "GR" },
+          { id: "play", label: "Hřiště", lang: "CZ" },
+          { id: "play", label: "Παιδική χαρά", lang: "GR" },
+          { id: "draw", label: "Kreslit", lang: "CZ" },
+          { id: "draw", label: "Ζωγραφίζω", lang: "GR" }
+        ]
+      },
+      "6": {
+        title: "Lekce 6 — V parku",
+        actors: "Luna ↔ Táta",
+        storyActors: {
+          left: { name: "Luna", icon: "🧒" },
+          right: { name: "Táta", icon: "👨" }
+        },
+        words: [],
+        flashcards: [
+          { front: "Park", back: "Πάρκο", example: "Jdeme do parku.", exampleGr: "Πάμε στο πάρκο.", icon: "🌳" },
+          { front: "Lavička", back: "Παγκάκι", example: "Sedím na lavičce.", exampleGr: "Κάθομαι στο παγκάκι.", icon: "🪑" },
+          { front: "Květina", back: "Λουλούδι", example: "Květina voní.", exampleGr: "Το λουλούδι μυρίζει.", icon: "🌸" },
+          { front: "Míč", back: "Μπάλα", example: "Míč skáče.", exampleGr: "Η μπάλα πηδάει.", icon: "⚽" },
+          { front: "Pes", back: "Σκύλος", example: "Pes běží.", exampleGr: "Ο σκύλος τρέχει.", icon: "🐕" },
+          { front: "Dítě", back: "Παιδί", example: "Dítě se směje.", exampleGr: "Το παιδί γελάει.", icon: "🧒" }
+        ],
+        gestures: [
+          { label: "Sedni na lavičku!", desc: "Posaď se jako v parku.", descGr: "Κάτσε σαν στο πάρκο.", tone: 600 },
+          { label: "Hoď míč!", desc: "Naznač hod rukou.", descGr: "Κάνε πως πετάς μπάλα.", tone: 540 }
+        ],
+        phrases: [
+          { cz: "Jdu do parku.", gr: "Πάω στο πάρκο.", tone: 520 },
+          { cz: "Sedíme na lavičce.", gr: "Καθόμαστε στο παγκάκι.", tone: 540 },
+          { cz: "Pes běží.", gr: "Ο σκύλος τρέχει.", tone: 560 }
+        ],
+        pexeso: [],
+        story: [
+          { who: "Luna", line: "Ahoj, tati! Jdeme do parku?", gr: "Γεια, μπαμπά! Πάμε στο πάρκο;", icon: "🧒", side: "left" },
+          { who: "Táta", line: "Ano, pojď, je tam lavička.", gr: "Ναι, έλα, έχει ένα παγκάκι.", icon: "👨", side: "right" },
+          { who: "Luna", line: "Sedneme si a hodím míč.", gr: "Καθόμαστε και πετάω την μπάλα.", icon: "⚽", side: "left" },
+          { who: "Táta", line: "Vidím psa, běží pro míč.", gr: "Βλέπω έναν σκύλο, τρέχει για την μπάλα.", icon: "🐕", side: "right" },
+          { who: "Luna", line: "Květina tady krásně voní.", gr: "Το λουλούδι εδώ μυρίζει όμορφα.", icon: "🌸", side: "left" },
+          { who: "Táta", line: "Park je hezký, že?", gr: "Όμορφο πάρκο, έτσι;", icon: "😊", side: "right" },
+          { who: "Luna", line: "Ano, ale chci už domů.", gr: "Ναι, αλλά θέλω να πάω σπίτι.", icon: "🧒", side: "left" }
+        ]
+      }
+    };
 
-    const flashcards = [
-      { front: "Žlutá", back: "Κίτρινο", example: "Slunce je žluté.", exampleGr: "Ο ήλιος είναι κίτρινος.", icon: "☀️" },
-      { front: "Modrá", back: "Μπλε", example: "Moře je modré.", exampleGr: "Η θάλασσα είναι μπλε.", icon: "🌊" },
-      { front: "Zelená", back: "Πράσινο", example: "List je zelený.", exampleGr: "Το φύλλο είναι πράσινο.", icon: "🌿" },
-      { front: "Ahoj!", back: "Γεια!", example: "Řekni: \"Ahoj, kamaráde!\"", exampleGr: "Πες: \"Γεια, φίλε!\"", icon: "👋" },
-      { front: "Děkuji", back: "Ευχαριστώ", example: "Řekni: \"Děkuji!\"", exampleGr: "Πες: \"Ευχαριστώ!\"", icon: "🙏" },
-      { front: "Prosím", back: "Παρακαλώ", example: "Řekni: \"Prosím, můžeš?\"", exampleGr: "Πες: \"Παρακαλώ, μπορείς;\"", icon: "😊" }
-    ];
+    function setSectionVisibility(id, visible) {
+      const section = document.getElementById(id);
+      if (!section) return;
+      section.style.display = visible ? "" : "none";
+    }
 
-    const gestures = [
-      { label: "Vstaň!", desc: "Postav se hned.", descGr: "Σήκω τώρα.", tone: 660 },
-      { label: "Sedni!", desc: "Posaď se dolů.", descGr: "Κάτσε κάτω.", tone: 520 },
-      { label: "Otoč se!", desc: "Udělaj malou otočku.", descGr: "Κάνε μια μικρή στροφή.", tone: 740 },
-      { label: "Řekni ahoj!", desc: "Řekni nahlas \"Ahoj\".", descGr: "Πες δυνατά «Γεια».", tone: 600 }
-    ];
-
-    const phrases = [
-      { cz: "Ahoj, já jsem Luna.", gr: "Γεια, είμαι η Λούνα.", tone: 430 },
-      { cz: "Podívej, modrá vlna!", gr: "Κοίτα, μπλε κύμα!", tone: 710 },
-      { cz: "Děkuji za hru.", gr: "Ευχαριστώ για το παιχνίδι.", tone: 520 },
-      { cz: "Chci hrát pexeso.", gr: "Θέλω να παίξω μνήμη.", tone: 640 }
-    ];
-
-    const pexesoCards = [
-      { id: "sun", label: "Slunce", lang: "CZ" },
-      { id: "sun", label: "Ήλιος", lang: "GR" },
-      { id: "sea", label: "Moře", lang: "CZ" },
-      { id: "sea", label: "Θάλασσα", lang: "GR" },
-      { id: "hi", label: "Ahoj", lang: "CZ" },
-      { id: "hi", label: "Γεια", lang: "GR" },
-      { id: "blue", label: "Modrá", lang: "CZ" },
-      { id: "blue", label: "Μπλε", lang: "GR" },
-      { id: "yellow", label: "Žlutá", lang: "CZ" },
-      { id: "yellow", label: "Κίτρινο", lang: "GR" },
-      { id: "thanks", label: "Děkuji", lang: "CZ" },
-      { id: "thanks", label: "Ευχαριστώ", lang: "GR" }
-    ];
-
-    function renderWords() {
+    function renderWords(list = []) {
       const grid = document.getElementById("wordGrid");
       grid.innerHTML = "";
-      words.forEach((w) => {
+      setSectionVisibility("slova", list.length > 0);
+      list.forEach((w) => {
         const btn = document.createElement("button");
         btn.className = "tile";
         btn.style.borderColor = w.color;
@@ -583,9 +922,10 @@
       });
     }
 
-    function renderFlashcards(data) {
+    function renderFlashcards(data = []) {
       const grid = document.getElementById("flashGrid");
       grid.innerHTML = "";
+      setSectionVisibility("karty", data.length > 0);
       data.forEach((card) => {
         const wrap = document.createElement("div");
         wrap.className = "flash-card";
@@ -620,10 +960,11 @@
       });
     }
 
-    function renderGestures() {
-      const list = document.getElementById("gestureList");
-      list.innerHTML = "";
-      gestures.forEach((g) => {
+    function renderGestures(list = []) {
+      const listElem = document.getElementById("gestureList");
+      listElem.innerHTML = "";
+      setSectionVisibility("gesta", list.length > 0);
+      list.forEach((g) => {
         const row = document.createElement("div");
         row.className = "gesture-row";
         row.innerHTML = `
@@ -639,14 +980,15 @@
           playTone(g.tone, 0.18);
           speakGreek(g.descGr || g.label);
         });
-        list.appendChild(row);
+        listElem.appendChild(row);
       });
     }
 
-    function renderPhrases() {
-      const list = document.getElementById("phraseList");
-      list.innerHTML = "";
-      phrases.forEach((p) => {
+    function renderPhrases(list = []) {
+      const listElem = document.getElementById("phraseList");
+      listElem.innerHTML = "";
+      setSectionVisibility("fraze", list.length > 0);
+      list.forEach((p) => {
         const row = document.createElement("div");
         row.className = "phrase-row";
         row.innerHTML = `
@@ -661,17 +1003,18 @@
           playTone(p.tone, 0.2);
           speakGreek(p.gr);
         });
-        list.appendChild(row);
+        listElem.appendChild(row);
       });
     }
 
-    function renderPexeso() {
+    function renderPexeso(cards = []) {
       const grid = document.getElementById("memoryGrid");
       grid.innerHTML = "";
       state.pexesoOpen = [];
       state.pexesoMatched = new Set();
+      setSectionVisibility("pexeso", cards.length > 0);
 
-      const shuffled = [...pexesoCards].sort(() => Math.random() - 0.5);
+      const shuffled = [...cards].sort(() => Math.random() - 0.5);
       shuffled.forEach((card, idx) => {
         const btn = document.createElement("button");
         btn.className = "memory-card";
@@ -695,7 +1038,7 @@
       playTone(620, 0.16);
       const greekMatch = card.lang === "GR"
         ? card.label
-        : (pexesoCards.find((c) => c.id === card.id && c.lang === "GR")?.label || card.label);
+        : ((state.currentLessonData?.pexeso || []).find((c) => c.id === card.id && c.lang === "GR")?.label || card.label);
       speakGreek(greekMatch);
       state.pexesoOpen.push({ btn, card });
 
@@ -723,8 +1066,99 @@
 
     function updatePexesoStatus() {
       const status = document.getElementById("pexesoStatus");
-      status.textContent = `${state.pexesoMatched.size}/${pexesoCards.length / 2} nalezeno`;
-      status.dataset.active = (state.pexesoMatched.size === pexesoCards.length / 2).toString();
+      const totalPairs = (state.currentLessonData?.pexeso?.length || 0) / 2;
+      status.textContent = `${state.pexesoMatched.size}/${totalPairs} nalezeno`;
+      status.dataset.active = (state.pexesoMatched.size === totalPairs).toString();
+    }
+
+    function renderStory(story = [], meta = {}) {
+      const wrap = document.getElementById("storyWrap");
+      const bar = document.getElementById("storyActorBar");
+      wrap.innerHTML = "";
+      if (bar) bar.innerHTML = "";
+      setSectionVisibility("pribeh", story.length > 0);
+
+      const leftActor = meta.left || { name: "Postava 1", icon: "🙂" };
+      const rightActor = meta.right || { name: "Postava 2", icon: "🙂" };
+      if (bar) {
+        bar.innerHTML = `
+          <div class="actor-chip">
+            <div class="actor-icon">${leftActor.icon || "🙂"}</div>
+            <span>${leftActor.name || "Postava 1"}</span>
+          </div>
+          <div class="actor-chip" style="justify-self:end;">
+            <div class="actor-icon">${rightActor.icon || "🙂"}</div>
+            <span>${rightActor.name || "Postava 2"}</span>
+          </div>
+        `;
+      }
+
+      story.forEach((scene) => {
+        const card = document.createElement("div");
+        card.className = "story-card";
+
+        const leftSlot = scene.side === "left" ? `
+          <div class="story-slot left">
+            <div class="bubble bubble-left">
+              <p class="story-line">${scene.line}</p>
+              <div class="story-gr">${scene.gr || ""}</div>
+            </div>
+          </div>
+        ` : `<div></div>`;
+
+        const rightSlot = scene.side === "right" ? `
+          <div class="story-slot right">
+            <div class="bubble bubble-right">
+              <p class="story-line">${scene.line}</p>
+              <div class="story-gr">${scene.gr || ""}</div>
+            </div>
+          </div>
+        ` : `<div></div>`;
+
+        const action = `<div></div>`;
+
+        card.innerHTML = `
+          ${leftSlot}
+          ${action}
+          ${rightSlot}
+        `;
+
+        card.querySelectorAll(".bubble").forEach((bubbleEl) => {
+          bubbleEl.addEventListener("click", (e) => {
+            e.stopPropagation();
+            bubbleEl.classList.toggle("show-gr");
+            playTone(500, 0.16);
+            if (scene.gr) speakGreek(scene.gr);
+          });
+        });
+
+        wrap.appendChild(card);
+      });
+    }
+
+    function setLesson(lessonId = "1") {
+      const lesson = lessons[lessonId] || lessons["1"];
+      state.currentLesson = lessonId;
+      state.currentLessonData = lesson;
+
+      const lessonSelect = document.getElementById("lessonSelect");
+      if (lessonSelect && lessonSelect.value !== lessonId) lessonSelect.value = lessonId;
+
+      const brandTitle = document.getElementById("brandTitle");
+      const brandBadge = document.getElementById("brandBadge");
+      const lessonLabel = document.querySelector(".lesson-label");
+      if (brandTitle) brandTitle.textContent = lesson.title;
+      if (brandBadge) brandBadge.textContent = `R${lessonId}`;
+      if (lessonLabel) lessonLabel.textContent = `Lekce ${lessonId}`;
+
+      renderWords(lesson.words || []);
+      renderFlashcards(lesson.flashcards || []);
+      renderGestures(lesson.gestures || []);
+      renderPhrases(lesson.phrases || []);
+      renderPexeso(lesson.pexeso || []);
+      renderStory(lesson.story || [], lesson.storyActors || {});
+      updatePexesoStatus();
+      playTone(540, 0.12);
     }
 
     function bindControls() {
@@ -732,33 +1166,26 @@
       const resetPexeso = document.getElementById("resetPexeso");
       const lessonSelect = document.getElementById("lessonSelect");
 
-      shuffleFlash.addEventListener("click", () => {
-        renderFlashcards([...flashcards].sort(() => Math.random() - 0.5));
-        playTone(780, 0.16);
-      });
-
       resetPexeso.addEventListener("click", () => {
-        renderPexeso();
+        renderPexeso(state.currentLessonData?.pexeso || []);
         playTone(600, 0.2);
       });
 
       if (lessonSelect) {
         lessonSelect.addEventListener("change", () => {
-          const chosen = lessonSelect.value;
-          document.querySelectorAll(".lesson-block").forEach((block) => {
-            block.dataset.active = (block.dataset.lesson === chosen).toString();
-          });
-          playTone(540, 0.18);
+          setLesson(lessonSelect.value);
         });
       }
+
+      shuffleFlash.addEventListener("click", () => {
+        const list = state.currentLessonData?.flashcards || [];
+        renderFlashcards([...list].sort(() => Math.random() - 0.5));
+        playTone(780, 0.16);
+      });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      renderWords();
-      renderFlashcards(flashcards);
-      renderGestures();
-      renderPhrases();
-      renderPexeso();
+      setLesson("1");
       bindControls();
     });
   </script>
